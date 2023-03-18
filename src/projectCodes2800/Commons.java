@@ -1,23 +1,34 @@
 package projectCodes2800;
 
-/* Copyright material for the convenience of GA/TAs to help students working on Lab Exercises,
- * but NOT to be shown or distributed to the students. */
+
+/* Copyright material for students taking COMP-2800 to work on assignment/labs/projects. */
 
 import java.awt.BorderLayout;
 import java.awt.GraphicsConfiguration;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import org.jogamp.java3d.*;
+import org.jogamp.java3d.Alpha;
+import org.jogamp.java3d.Appearance;
+import org.jogamp.java3d.BoundingSphere;
+import org.jogamp.java3d.BranchGroup;
+import org.jogamp.java3d.Canvas3D;
+import org.jogamp.java3d.Material;
+import org.jogamp.java3d.PointLight;
+import org.jogamp.java3d.RotationInterpolator;
+import org.jogamp.java3d.Transform3D;
+import org.jogamp.java3d.TransformGroup;
 import org.jogamp.java3d.utils.behaviors.keyboard.KeyNavigatorBehavior;
-import org.jogamp.java3d.utils.geometry.ColorCube;
-import org.jogamp.java3d.utils.universe.*;
-import org.jogamp.vecmath.*;
+import org.jogamp.java3d.utils.geometry.Box;
+import org.jogamp.java3d.utils.universe.SimpleUniverse;
+import org.jogamp.java3d.utils.universe.ViewingPlatform;
+import org.jogamp.vecmath.Color3f;
+import org.jogamp.vecmath.Point3d;
+import org.jogamp.vecmath.Point3f;
+import org.jogamp.vecmath.Vector3d;
 
-public class RotatingCube extends JPanel {
+public class Commons extends JPanel {
 
-	//test
 	private static final long serialVersionUID = 1L;
 	private static JFrame frame;
 	
@@ -34,12 +45,29 @@ public class RotatingCube extends JPanel {
 	public final static Color3f[] clr_list = {Blue, Green, Red, Yellow,
 			Cyan, Orange, Magenta, Grey};
 	public final static int clr_num = 8;
+	private static Color3f[] mtl_clrs = {White, Grey, Black};
 
 	public final static BoundingSphere hundredBS = new BoundingSphere(new Point3d(), 100.0);
 	public final static BoundingSphere twentyBS = new BoundingSphere(new Point3d(), 20.0);
+
+    /* A1: function to define object's material and use it to set object's appearance */
+	public static Appearance obj_Appearance(Color3f m_clr) {		
+		Material mtl = new Material();                     // define material's attributes
+		mtl.setShininess(32);
+		mtl.setAmbientColor(mtl_clrs[0]);                   // use them to define different materials
+		mtl.setDiffuseColor(m_clr);
+		mtl.setSpecularColor(mtl_clrs[1]);
+		mtl.setEmissiveColor(mtl_clrs[2]);                  // use it to switch button on/off
+		mtl.setLightingEnable(true);
+
+		Appearance app = new Appearance();
+		app.setMaterial(mtl);                              // set appearance's material
+		return app;
+	}	
 	
-	/* a function to create a rotation behavior and refer it to 'rotTG' */
-	private static RotationInterpolator rotateBehavior(int r_num, TransformGroup rotTG) {
+	/* a function to create a rotation behavior and refer it to 'my_TG' */
+	public static RotationInterpolator rotate_Behavior(int r_num, TransformGroup rotTG) {
+
 		rotTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
 		Transform3D yAxis = new Transform3D();
 		Alpha rotationAlpha = new Alpha(-1, r_num);
@@ -49,8 +77,8 @@ public class RotatingCube extends JPanel {
 		return rot_beh;
 	}
 	
-	/* a function to add two point lights at the opposite locations of the scene */
-	public static BranchGroup addLights(Color3f clr, int p_num) {
+	/* a function to place one light or two lights at opposite locations */
+	public static BranchGroup add_Lights(Color3f clr, int p_num) {
 		BranchGroup lightBG = new BranchGroup();
 		Point3f atn = new Point3f(0.5f, 0.0f, 0.0f);
 		PointLight ptLight;
@@ -66,7 +94,8 @@ public class RotatingCube extends JPanel {
 	}
 
 	/* a function to position viewer to 'eye' location */
-	public static void defineViewer(SimpleUniverse simple_U, Point3d eye) {
+	public static void define_Viewer(SimpleUniverse simple_U, Point3d eye) {
+
 	    TransformGroup viewTransform = simple_U.getViewingPlatform().getViewPlatformTransform();
 		Point3d center = new Point3d(0, 0, 0);             // define the point where the eye looks at
 		Vector3d up = new Vector3d(0, 1, 0);               // define camera's up direction
@@ -77,7 +106,7 @@ public class RotatingCube extends JPanel {
 	}
 
 	/* a function to allow key navigation with the ViewingPlateform */
-	public static KeyNavigatorBehavior keyNavigation(SimpleUniverse simple_U) {
+	public static KeyNavigatorBehavior key_Navigation(SimpleUniverse simple_U) {
 		ViewingPlatform view_platfm = simple_U.getViewingPlatform();
 		TransformGroup view_TG = view_platfm.getViewPlatformTransform();
 		KeyNavigatorBehavior keyNavBeh = new KeyNavigatorBehavior(view_TG);
@@ -85,27 +114,27 @@ public class RotatingCube extends JPanel {
 		return keyNavBeh;
 	}
 
-	/* a function to build the content branch */
-	public static BranchGroup createScene() {
+	/* a function to build the content branch and attach to 'scene' */
+	public static BranchGroup create_Scene() {
 		BranchGroup sceneBG = new BranchGroup();
 		TransformGroup sceneTG = new TransformGroup();
-		sceneTG.addChild(new ColorCube(0.5));
-		sceneBG.addChild(addLights(White, 1));	
-		sceneBG.addChild(rotateBehavior(5000, sceneTG));
+		sceneTG.addChild(new Box(0.5f, 0.5f, 0.5f, obj_Appearance(Orange) ));
+		sceneBG.addChild(rotate_Behavior(7500, sceneTG));
 		
 		sceneBG.addChild(sceneTG);
 		return sceneBG;
 	}
 
-	/* NOTE: Keep the constructor for each of the labs and assignments */
-	public RotatingCube(BranchGroup sceneBG) {
+	/* a constructor to set up for the application */
+	public Commons(BranchGroup sceneBG) {
 		GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
 		Canvas3D canvas = new Canvas3D(config);
 		
 		SimpleUniverse su = new SimpleUniverse(canvas);    // create a SimpleUniverse
-		defineViewer(su, new Point3d(1.0d, 1.0d, 4.0d));   // set the viewer's location
+		define_Viewer(su, new Point3d(1.0d, 1.0d, 4.0d));  // set the viewer's location
 		
-		sceneBG.addChild(keyNavigation(su));               // allow key navigation
+		sceneBG.addChild(add_Lights(White, 1));	
+		sceneBG.addChild(key_Navigation(su));              // allow key navigation
 		sceneBG.compile();		                           // optimize the BranchGroup
 		su.addBranchGraph(sceneBG);                        // attach the scene to SimpleUniverse
 
@@ -116,8 +145,8 @@ public class RotatingCube extends JPanel {
 	}
 
 	public static void main(String[] args) {
-		frame = new JFrame("XY's Rotating Cube");          // NOTE: change XY to student's initials
-		frame.getContentPane().add(new RotatingCube(createScene()));  // create an instance of the class
+		frame = new JFrame("Group Common File");            // NOTE: change XY to student's initials
+		frame.getContentPane().add(new Commons(create_Scene()));  // create an instance of the class
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }
