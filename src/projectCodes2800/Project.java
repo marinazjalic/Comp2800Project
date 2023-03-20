@@ -38,6 +38,7 @@ public class Project extends JPanel {
 		Saturn saturn = new Saturn();
 		Uranus uranus = new Uranus();
 		Neptune neptune = new Neptune();
+		Meteor meteor = new Meteor();
 		
 		sceneTG.addChild(sun.position_Object());
 		sceneTG.addChild(earth.position_Object());
@@ -48,6 +49,7 @@ public class Project extends JPanel {
 		sceneTG.addChild(saturn.position_Object());
 		sceneTG.addChild(uranus.position_Object());
 		sceneTG.addChild(neptune.position_Object());
+		sceneTG.addChild(meteor.position_Object());
 		
 		BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.MAX_VALUE);
 		sceneTG.addChild(createBackground(Commons.Black, bounds));
