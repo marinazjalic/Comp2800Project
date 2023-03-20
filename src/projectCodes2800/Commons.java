@@ -26,6 +26,7 @@ import org.jogamp.vecmath.Color3f;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Point3f;
 import org.jogamp.vecmath.Vector3d;
+import org.jogamp.vecmath.Vector3f;
 
 public class Commons extends JPanel {
 
@@ -64,6 +65,29 @@ public class Commons extends JPanel {
 		app.setMaterial(mtl);                              // set appearance's material
 		return app;
 	}	
+	
+	public static TransformGroup rotation(int r_num, char axis, float min, float max) {
+		TransformGroup rotTG = new TransformGroup();
+		Transform3D rot_axis = new Transform3D();
+
+		rotTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+		switch (axis){
+			case 'z': rot_axis.rotZ(Math.PI/2);
+//						rot_axis.setTranslation(new Vector3f(5f,5f,0));
+				break;
+			case 'x': rot_axis.rotX(Math.PI/2);
+			
+				break;
+			default: break;
+		}
+		Alpha rotationAlpha = new Alpha(-1, r_num);
+		RotationInterpolator rot_beh = new RotationInterpolator(rotationAlpha, rotTG, rot_axis, min, max);
+		rot_beh.setSchedulingBounds(hundredBS);
+		rotTG.addChild(rot_beh);
+		//rotTG.setTransform(trfm);
+		
+		return rotTG;
+	}
 	
 	/* a function to create a rotation behavior and refer it to 'my_TG' */
 	public static RotationInterpolator rotate_Behavior(int r_num, TransformGroup rotTG) {

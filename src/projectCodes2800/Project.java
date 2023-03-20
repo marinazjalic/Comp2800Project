@@ -24,7 +24,8 @@ public class Project extends JPanel {
 	public static BranchGroup create_Scene() {
 		BranchGroup sceneBG = new BranchGroup();
 		TransformGroup sceneTG = new TransformGroup();
-		
+		TransformGroup[] rotations = new TransformGroup[8];
+		int k = 2650;//"earth speed" - each rotation is set to be relative to earth days
 		Sun sun = new Sun();
 		Earth earth = new Earth();
 		Mercury mercury = new Mercury();
@@ -35,21 +36,47 @@ public class Project extends JPanel {
 		Uranus uranus = new Uranus();
 		Neptune neptune = new Neptune();
 		
-		sceneTG.addChild(sun.position_Object());
-		sceneTG.addChild(earth.position_Object());
-		sceneTG.addChild(mercury.position_Object());
-		sceneTG.addChild(venus.position_Object());
-		sceneTG.addChild(mars.position_Object());
-		sceneTG.addChild(jupiter.position_Object());
-		sceneTG.addChild(saturn.position_Object());
-		sceneTG.addChild(uranus.position_Object());
-		sceneTG.addChild(neptune.position_Object());
 		
+		rotations[0] = Commons.rotation(k,'y', 0f,(float)Math.PI * 2);
+		rotations[0].addChild(earth.position_Object());
+		
+		rotations[1]= Commons.rotation((int)(k*0.25), 'y', 0f,(float)Math.PI * 2);
+		rotations[1].addChild(mercury.position_Object());
+		
+		rotations[2] = Commons.rotation((int)(k*0.62), 'y', 0f, (float)Math.PI * 2);
+		rotations[2].addChild(venus.position_Object());
+		
+		rotations[3] = Commons.rotation((int)(k*1.88), 'y', 0f, (float)Math.PI * 2);
+		rotations[3].addChild(mars.position_Object());
+		
+		rotations[4] = Commons.rotation((int)(k*11.86), 'y', 0f, (float)Math.PI * 2);
+		rotations[4].addChild(jupiter.position_Object());
+		
+		rotations[5] = Commons.rotation((int)(k*29.46), 'y', 0f, (float)Math.PI * 2);
+		rotations[5].addChild(saturn.position_Object());
+		
+
+		rotations[6] = Commons.rotation((int)(k*84), 'y', 0f, (float)Math.PI * 2);
+		rotations[6].addChild(uranus.position_Object());
+
+		rotations[7] = Commons.rotation((int)(k*164.8), 'y', 0f, (float)Math.PI * 2);
+		rotations[7].addChild(neptune.position_Object());
+		
+		
+		TransformGroup sunTG = new TransformGroup();
+		sunTG.addChild(sun.position_Object());
+		
+		for(int i =0; i<8; i++)
+			sunTG.addChild(rotations[i]);
+		
+		
+		sceneTG.addChild(sunTG);
+
 
 	 	sceneBG.addChild(sceneTG);
 	 	
 	 	sceneBG.addChild(Commons.add_Lights(Commons.White, 1));
-	 	sceneBG.addChild(Commons.rotate_Behavior(7500, sceneTG));
+	 	//sceneBG.addChild(Commons.rotate_Behavior(7500, sceneTG));
 		
 		return sceneBG;
 		
@@ -59,9 +86,8 @@ public class Project extends JPanel {
 	public Project(BranchGroup sceneBG) {
 		GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
 		Canvas3D canvas = new Canvas3D(config);
-		
 		SimpleUniverse su = new SimpleUniverse(canvas);    // create a SimpleUniverse
-		Commons.define_Viewer(su, new Point3d(5.0d, 5.0d, 4.0d));
+		Commons.define_Viewer(su, new Point3d(5.0d, 5.0d, 5.0d));
 		sceneBG.addChild(Commons.key_Navigation(su));
 		sceneBG.addChild(Commons.key_Navigation(su));     // allow key navigation
 		sceneBG.compile();		                           // optimize the BranchGroup
