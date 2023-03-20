@@ -244,7 +244,7 @@ class Meteor extends ProjectObjects {
 		Transform3D translator = new Transform3D();	
 		translator.setTranslation(new Vector3f(0f, 0f, 0f));
 		Transform3D scaler = new Transform3D();
-		scaler.setScale(0.2);
+		scaler.setScale(0.1);
 		Transform3D trfm = new Transform3D();
 		trfm.mul(translator);
 		trfm.mul(scaler);
@@ -253,7 +253,7 @@ class Meteor extends ProjectObjects {
 	}
 	
 	public Node create_Object() {
-		return new Sphere(0.5f, Primitive.GENERATE_TEXTURE_COORDS, create_Appearance("meteorite", Commons.Blue));
+		return new Sphere(0.5f, Primitive.GENERATE_TEXTURE_COORDS, create_Appearance("meteor", Commons.Grey));
 	}
 	
 	public Node position_Object() {
