@@ -7,12 +7,16 @@ import java.awt.GraphicsConfiguration;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.jogamp.java3d.Background;
+import org.jogamp.java3d.BoundingSphere;
 import org.jogamp.java3d.BranchGroup;
 import org.jogamp.java3d.Canvas3D;
 import org.jogamp.java3d.TransformGroup;
 import org.jogamp.java3d.utils.geometry.Box;
 import org.jogamp.java3d.utils.geometry.Primitive;
+import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.java3d.utils.universe.SimpleUniverse;
+import org.jogamp.vecmath.Color3f;
 import org.jogamp.vecmath.Point3d;
 
 
@@ -74,12 +78,24 @@ public class Project extends JPanel {
 
 
 	 	sceneBG.addChild(sceneTG);
-	 	
+	 	BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.MAX_VALUE);
+	 	sceneTG.addChild(createBackground(Commons.Black, bounds));
 	 	sceneBG.addChild(Commons.add_Lights(Commons.White, 1));
 	 	//sceneBG.addChild(Commons.rotate_Behavior(7500, sceneTG));
 		
 		return sceneBG;
 		
+	}
+	
+	//method to create background
+	private static Background createBackground(Color3f clr, BoundingSphere bounds)
+	{
+		Background bg = new Background();
+		bg.setImage(new TextureLoader("src/projectCodes2800/images/background.jpg", null).getImage());
+		bg.setImageScaleMode(Background.SCALE_FIT_MAX);
+		bg.setApplicationBounds(bounds);
+		bg.setColor(clr);		
+		return bg;
 	}
 	
 	/* NOTE: Keep the constructor for each of the labs and assignments */
