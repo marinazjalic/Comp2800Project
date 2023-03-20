@@ -18,7 +18,7 @@ import org.jogamp.vecmath.Vector3f;
 public abstract class ProjectObjects {
 	protected abstract Node create_Object();
 	protected abstract Node position_Object();
-	
+	protected static int k = 4;//rotation scaling 
 	
 	//method for loading planet textures
 	public static Texture loadTextures(String imageName)
@@ -57,19 +57,24 @@ class Sun extends ProjectObjects{
 
 class Earth extends ProjectObjects {
 	private TransformGroup objTG;
+	
 	public Earth() {
 		Transform3D translator = new Transform3D();	
-		translator.setTranslation(new Vector3f(1.4f, 0f, -0.7f));
+		translator.setTranslation(new Vector3f(2f, 0f, 0f));
 		Transform3D scaler = new Transform3D();
 		scaler.setScale(0.4);
 		Transform3D trfm = new Transform3D();
 		trfm.mul(translator);
 		trfm.mul(scaler);
+		
 		objTG = new TransformGroup(trfm);
-		objTG.addChild(create_Object());
+		TransformGroup rotTG =	Commons.rotation(366*k,'z', 0f,(float) Math.PI*2);
+		rotTG.addChild(create_Object());
+		objTG.addChild(rotTG);
 	}
 	
 	public Node create_Object() {
+		
 		return new Sphere(0.5f, Primitive.GENERATE_TEXTURE_COORDS, create_Appearance("earth", Commons.Blue));
 	}
 	
@@ -82,14 +87,17 @@ class Mercury extends ProjectObjects {
 	private TransformGroup objTG;
 	public Mercury() {
 		Transform3D translator = new Transform3D();	
-		translator.setTranslation(new Vector3f(0.3f, 0f, -0.7f));
+		translator.setTranslation(new Vector3f(1f, 0f, 0f));
 		Transform3D scaler = new Transform3D();
 		scaler.setScale(0.2);
 		Transform3D trfm = new Transform3D();
 		trfm.mul(translator);
 		trfm.mul(scaler);
+		
 		objTG = new TransformGroup(trfm);
-		objTG.addChild(create_Object());
+		TransformGroup rotTG =	Commons.rotation(2*k,'z', 0f,(float) Math.PI*2);
+		rotTG.addChild(create_Object());
+		objTG.addChild(rotTG);
 	}
 	
 	public Node create_Object() {
@@ -105,14 +113,16 @@ class Venus extends ProjectObjects {
 	private TransformGroup objTG;
 	public Venus() {
 		Transform3D translator = new Transform3D();	
-		translator.setTranslation(new Vector3f(-1.3f, 0f, -0.7f));
+		translator.setTranslation(new Vector3f(3f, 0f, 0f));
 		Transform3D scaler = new Transform3D();
 		scaler.setScale(0.4);
 		Transform3D trfm = new Transform3D();
 		trfm.mul(translator);
 		trfm.mul(scaler);
 		objTG = new TransformGroup(trfm);
-		objTG.addChild(create_Object());
+		TransformGroup rotTG =	Commons.rotation(366*k,'z', 0f,(float) Math.PI*2);
+		rotTG.addChild(create_Object());
+		objTG.addChild(rotTG);
 	}
 	
 	public Node create_Object() {
@@ -128,14 +138,16 @@ class Mars extends ProjectObjects {
 	private TransformGroup objTG;
 	public Mars() {
 		Transform3D translator = new Transform3D();	
-		translator.setTranslation(new Vector3f(-1.4f, 0f, 0.4f));
+		translator.setTranslation(new Vector3f(4f, 0f, 0f));
 		Transform3D scaler = new Transform3D();
 		scaler.setScale(0.4);
 		Transform3D trfm = new Transform3D();
 		trfm.mul(translator);
 		trfm.mul(scaler);
 		objTG = new TransformGroup(trfm);
-		objTG.addChild(create_Object());
+		TransformGroup rotTG =	Commons.rotation(366*k,'z', 0f,(float) Math.PI*2);
+		rotTG.addChild(create_Object());
+		objTG.addChild(rotTG);
 	}
 	
 	public Node create_Object() {
@@ -151,14 +163,16 @@ class Jupiter extends ProjectObjects {
 	private TransformGroup objTG;
 	public Jupiter() {
 		Transform3D translator = new Transform3D();	
-		translator.setTranslation(new Vector3f(1.8f, 0f, -1.8f));
+		translator.setTranslation(new Vector3f(5f, 0f, 0f));
 		Transform3D scaler = new Transform3D();
 		scaler.setScale(0.5);
 		Transform3D trfm = new Transform3D();
 		trfm.mul(translator);
 		trfm.mul(scaler);
 		objTG = new TransformGroup(trfm);
-		objTG.addChild(create_Object());
+		TransformGroup rotTG =	Commons.rotation(366*k,'z', 0f,(float) Math.PI*2);
+		rotTG.addChild(create_Object());
+		objTG.addChild(rotTG);
 	}
 	
 	public Node create_Object() {
@@ -174,14 +188,16 @@ class Saturn extends ProjectObjects {
 	private TransformGroup objTG;
 	public Saturn() {
 		Transform3D translator = new Transform3D();	
-		translator.setTranslation(new Vector3f(-2.7f, 0f, -0.7f));
+		translator.setTranslation(new Vector3f(6f, 0f, 0f));
 		Transform3D scaler = new Transform3D();
 		scaler.setScale(0.5);
 		Transform3D trfm = new Transform3D();
 		trfm.mul(translator);
 		trfm.mul(scaler);
 		objTG = new TransformGroup(trfm);
-		objTG.addChild(create_Object());
+		TransformGroup rotTG =	Commons.rotation(366*k,'z', 0f,(float) Math.PI*2);
+		rotTG.addChild(create_Object());
+		objTG.addChild(rotTG);
 	}
 	
 	public Node create_Object() {
@@ -197,7 +213,7 @@ class Uranus extends ProjectObjects {
 	private TransformGroup objTG;
 	public Uranus() {
 		Transform3D translator = new Transform3D();	
-		translator.setTranslation(new Vector3f(2.5f, 0f, -1.5f));
+		translator.setTranslation(new Vector3f(7f, 0f, 0f));
 		Transform3D scaler = new Transform3D();
 		scaler.setScale(0.4);
 		Transform3D trfm = new Transform3D();
@@ -220,14 +236,16 @@ class Neptune extends ProjectObjects {
 	private TransformGroup objTG;
 	public Neptune() {
 		Transform3D translator = new Transform3D();	
-		translator.setTranslation(new Vector3f(-2.5f, 0f, 0.7f));
+		translator.setTranslation(new Vector3f(8f, 0f, 0f));
 		Transform3D scaler = new Transform3D();
 		scaler.setScale(0.4);
 		Transform3D trfm = new Transform3D();
 		trfm.mul(translator);
 		trfm.mul(scaler);
 		objTG = new TransformGroup(trfm);
-		objTG.addChild(create_Object());
+		TransformGroup rotTG =	Commons.rotation(366*k,'z', 0f,(float) Math.PI*2);
+		rotTG.addChild(create_Object());
+		objTG.addChild(rotTG);
 	}
 	
 	public Node create_Object() {
