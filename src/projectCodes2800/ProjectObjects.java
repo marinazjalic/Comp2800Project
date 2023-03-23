@@ -263,7 +263,7 @@ class Neptune extends ProjectObjects {
 			Transform3D translator = new Transform3D();	
 			translator.setTranslation(new Vector3f(0f, 0f, 0f));
 			Transform3D scaler = new Transform3D();
-			scaler.setScale(0.1);
+			scaler.setScale(0.5);
 			Transform3D trfm = new Transform3D();
 			trfm.mul(translator);
 			trfm.mul(scaler);
@@ -272,7 +272,9 @@ class Neptune extends ProjectObjects {
 		}
 		
 		public Node create_Object() {
-			return new Sphere(0.5f, Primitive.GENERATE_TEXTURE_COORDS, create_Appearance("meteor", Commons.Grey));
+			Sphere sphere = new Sphere(0.5f, Primitive.GENERATE_TEXTURE_COORDS, create_Appearance("meteor", Commons.Grey));
+			sphere.setUserData(0);
+			return sphere;
 		}
 		
 		public Node position_Object() {
