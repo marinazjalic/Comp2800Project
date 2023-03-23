@@ -33,7 +33,7 @@ public abstract class ProjectObjects {
 		ObjectFile f = new ObjectFile(flags, (float)(60 * Math.PI/180.0));
 		Scene s = null;
 		try {
-			s = f.load("src/codesCN280/images/" + filename + ".obj"); //load ring.obj file.
+			s = f.load("src\\projectCodes2800\\images\\" + filename + ".obj"); //load ring.obj file.
 			
 		}catch (FileNotFoundException e) {
 			System.err.println(e);
@@ -228,7 +228,15 @@ class Saturn extends ProjectObjects {
 		trfm.mul(translator);
 		trfm.mul(scaler);
 		objTG = new TransformGroup(trfm);
-		TransformGroup rotTG =	Commons.rotation(366*k,'y', 0f,(float) Math.PI*2);
+
+		BranchGroup rings = loadShape("SaturnRing", Commons.obj_Appearance(new Color3f(99, 90, 73)));
+		Transform3D ringT3 = new Transform3D();
+		ringT3.rotY(Math.PI);
+		TransformGroup ringTG = new TransformGroup(ringT3);
+		ringTG.addChild(rings);
+
+		TransformGroup rotTG =	Commons.rotation(366*k,'r', 0f,(float) Math.PI*2);
+		rotTG.addChild(ringTG);
 		rotTG.addChild(create_Object());
 		objTG.addChild(rotTG);
 	}
