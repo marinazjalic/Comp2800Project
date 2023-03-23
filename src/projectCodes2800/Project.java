@@ -156,7 +156,7 @@ public class Project extends JPanel implements MouseListener {
 		meteorTG = new TransformGroup();
 		t3d = new Transform3D();
 		t3d.setTranslation(new Vector3d(1,0,0));
-		t3d.setScale(1.4);
+		t3d.setScale(1.3);
 		meteorTG.setTransform(t3d);
 		
 		meteorTG.addChild(create_meteor(0.05*Math.random(), -0.05*Math.random(), 0.05*Math.random(), Math.random()));
