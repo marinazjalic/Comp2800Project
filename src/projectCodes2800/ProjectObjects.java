@@ -1,13 +1,21 @@
 package projectCodes2800;
 
+import java.io.FileNotFoundException;
+
 import org.jogamp.java3d.Appearance;
+import org.jogamp.java3d.BranchGroup;
 import org.jogamp.java3d.ColoringAttributes;
 import org.jogamp.java3d.ImageComponent2D;
 import org.jogamp.java3d.Node;
+import org.jogamp.java3d.Shape3D;
 import org.jogamp.java3d.Texture;
 import org.jogamp.java3d.Texture2D;
 import org.jogamp.java3d.Transform3D;
 import org.jogamp.java3d.TransformGroup;
+import org.jogamp.java3d.loaders.IncorrectFormatException;
+import org.jogamp.java3d.loaders.ParsingErrorException;
+import org.jogamp.java3d.loaders.Scene;
+import org.jogamp.java3d.loaders.objectfile.ObjectFile;
 import org.jogamp.java3d.utils.geometry.Primitive;
 import org.jogamp.java3d.utils.geometry.Sphere;
 import org.jogamp.java3d.utils.image.TextureLoader;
@@ -20,6 +28,31 @@ public abstract class ProjectObjects {
 	protected abstract Node position_Object();
 	protected static int k = 4;//rotation scaling 
 	
+	protected static BranchGroup loadShape(String filename, Appearance app) {
+		int flags = ObjectFile.RESIZE | ObjectFile.TRIANGULATE | ObjectFile.STRIPIFY;
+		ObjectFile f = new ObjectFile(flags, (float)(60 * Math.PI/180.0));
+		Scene s = null;
+		try {
+			s = f.load("src\\projectCodes2800\\images\\" + filename + ".obj"); //load ring.obj file.
+			
+		}catch (FileNotFoundException e) {
+			System.err.println(e);
+			System.exit(1);
+		}catch (ParsingErrorException e) {
+			System.err.println(e);
+			System.exit(1);
+		}catch (IncorrectFormatException e) {
+			System.err.println(e);
+			System.exit(1);
+		}
+		
+		BranchGroup objBG = s.getSceneGroup();
+		Shape3D ringShape = (Shape3D)objBG.getChild(0);
+		ringShape.setAppearance(app);
+		
+		return objBG;
+	}
+
 	//method for loading planet textures
 	public static Texture loadTextures(String imageName)
 	{
@@ -195,7 +228,15 @@ class Saturn extends ProjectObjects {
 		trfm.mul(translator);
 		trfm.mul(scaler);
 		objTG = new TransformGroup(trfm);
-		TransformGroup rotTG =	Commons.rotation(366*k,'y', 0f,(float) Math.PI*2);
+
+		BranchGroup rings = loadShape("SaturnRing", Commons.obj_Appearance(new Color3f(99, 90, 73)));
+		Transform3D ringT3 = new Transform3D();
+		ringT3.rotY(Math.PI);
+		TransformGroup ringTG = new TransformGroup(ringT3);
+		ringTG.addChild(rings);
+
+		TransformGroup rotTG =	Commons.rotation(366*k,'r', 0f,(float) Math.PI*2);
+		rotTG.addChild(ringTG);
 		rotTG.addChild(create_Object());
 		objTG.addChild(rotTG);
 	}

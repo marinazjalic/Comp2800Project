@@ -28,10 +28,11 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 import org.jogamp.vecmath.Vector3f;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
+public class Project extends JPanel implements KeyListener, MouseListener {
 
-
-public class Project extends JPanel implements MouseListener {
 	
 	private static final long serialVersionUID = 1L;
 	private static JFrame frame;
@@ -144,7 +145,7 @@ public class Project extends JPanel implements MouseListener {
 		myTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
 		Transform3D axisPosition = new Transform3D();
 		axisPosition.rotX(-Math.PI/2);
-		posInterpolator = new PositionInterpolator(new Alpha(-1,3000), myTG, axisPosition, 0, 15f);
+		posInterpolator = new PositionInterpolator(new Alpha(-1,5000), myTG, axisPosition, 0, 15f);
 		posInterpolator.setSchedulingBounds(new BoundingSphere(new Point3d(), 100.0));
 		myTG.addChild(posInterpolator);
 		myTG.addChild(node);
@@ -260,7 +261,7 @@ public class Project extends JPanel implements MouseListener {
 	public Project(BranchGroup sceneBG) {
 		GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
 		canvas = new Canvas3D(config);
-		canvas = new Canvas3D(config);                        
+		canvas.addKeyListener(this);                      
 		canvas.addMouseListener(this);    
 		SimpleUniverse su = new SimpleUniverse(canvas);    // create a SimpleUniverse
 		Commons.define_Viewer(su, new Point3d(5.0d, 5.0d, 5.0d));
@@ -340,6 +341,15 @@ public class Project extends JPanel implements MouseListener {
 		
 	}
 	
-	
+	public void keyPressed(KeyEvent event)	{
+		if ((event.getKeyCode() == KeyEvent.VK_SPACE)) {	//if space bar is pressed
+			System.out.println("Space bar was pressed.");
+			 
+			//enter logic for what happens to rocket when space bar is pressed here:
+		}
+	}
+
+	public void keyReleased(KeyEvent e) {}
+	public void keyTyped(KeyEvent e) {}
 
 }
