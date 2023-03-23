@@ -19,8 +19,11 @@ import org.jogamp.java3d.utils.universe.SimpleUniverse;
 import org.jogamp.vecmath.Color3f;
 import org.jogamp.vecmath.Point3d;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class Project extends JPanel {
+
+public class Project extends JPanel implements KeyListener{
 	
 	private static final long serialVersionUID = 1L;
 	private static JFrame frame;
@@ -115,6 +118,7 @@ public class Project extends JPanel {
 	public Project(BranchGroup sceneBG) {
 		GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
 		Canvas3D canvas = new Canvas3D(config);
+		canvas.addKeyListener(this);
 		SimpleUniverse su = new SimpleUniverse(canvas);    // create a SimpleUniverse
 		Commons.define_Viewer(su, new Point3d(5.0d, 5.0d, 5.0d));
 		sceneBG.addChild(Commons.key_Navigation(su));
@@ -134,6 +138,15 @@ public class Project extends JPanel {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
-	
+	public void keyPressed(KeyEvent event)	{
+		if ((event.getKeyCode() == KeyEvent.VK_SPACE)) {	//if space bar is pressed
+			System.out.println("Space bar was pressed.");
+			 
+			//enter logic for what happens to rocket when space bar is pressed here:
+		}
+	}
+
+	public void keyReleased(KeyEvent e) {}
+	public void keyTyped(KeyEvent e) {}
 
 }
