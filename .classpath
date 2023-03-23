@@ -7,10 +7,10 @@
 			<attribute name="add-exports" value="java.base/java.lang=ALL-UNNAMED:java.desktop/sun.awt=ALL-UNNAMED:java.desktop/sun.java2d=ALL-UNNAMED"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Jars4Java3D/j3dcore.jar"/>
-	<classpathentry kind="lib" path="C:/Jars4Java3D/j3dexamples.jar"/>
-	<classpathentry kind="lib" path="C:/Jars4Java3D/j3dutils.jar"/>
-	<classpathentry kind="lib" path="C:/Jars4Java3D/jogamp-fat.jar"/>
-	<classpathentry kind="lib" path="C:/Jars4Java3D/vecmath.jar"/>
+	<classpathentry kind="lib" path="C:/Users/vedra/Desktop/Java4Java3D/j3dcore.jar"/>
+	<classpathentry kind="lib" path="C:/Users/vedra/Desktop/Java4Java3D/j3dexamples.jar"/>
+	<classpathentry kind="lib" path="C:/Users/vedra/Desktop/Java4Java3D/j3dutils.jar"/>
+	<classpathentry kind="lib" path="C:/Users/vedra/Desktop/Java4Java3D/jogamp-fat.jar"/>
+	<classpathentry kind="lib" path="C:/Users/vedra/Desktop/Java4Java3D/vecmath.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
