@@ -68,7 +68,7 @@ class Earth extends ProjectObjects {
 		trfm.mul(scaler);
 		
 		objTG = new TransformGroup(trfm);
-		TransformGroup rotTG =	Commons.rotation(366*k,'z', 0f,(float) Math.PI*2);
+		TransformGroup rotTG =	Commons.rotation(366*k,'y', 0f,(float) Math.PI*2);
 		rotTG.addChild(create_Object());
 		objTG.addChild(rotTG);
 	}
@@ -95,7 +95,7 @@ class Mercury extends ProjectObjects {
 		trfm.mul(scaler);
 		
 		objTG = new TransformGroup(trfm);
-		TransformGroup rotTG =	Commons.rotation(2*k,'z', 0f,(float) Math.PI*2);
+		TransformGroup rotTG =	Commons.rotation(2*k,'y', 0f,(float) Math.PI*2);
 		rotTG.addChild(create_Object());
 		objTG.addChild(rotTG);
 	}
@@ -120,7 +120,7 @@ class Venus extends ProjectObjects {
 		trfm.mul(translator);
 		trfm.mul(scaler);
 		objTG = new TransformGroup(trfm);
-		TransformGroup rotTG =	Commons.rotation(366*k,'z', 0f,(float) Math.PI*2);
+		TransformGroup rotTG =	Commons.rotation(366*k,'y', 0f,(float) Math.PI*2);
 		rotTG.addChild(create_Object());
 		objTG.addChild(rotTG);
 	}
@@ -145,7 +145,7 @@ class Mars extends ProjectObjects {
 		trfm.mul(translator);
 		trfm.mul(scaler);
 		objTG = new TransformGroup(trfm);
-		TransformGroup rotTG =	Commons.rotation(366*k,'z', 0f,(float) Math.PI*2);
+		TransformGroup rotTG =	Commons.rotation(366*k,'y', 0f,(float) Math.PI*2);
 		rotTG.addChild(create_Object());
 		objTG.addChild(rotTG);
 	}
@@ -170,7 +170,7 @@ class Jupiter extends ProjectObjects {
 		trfm.mul(translator);
 		trfm.mul(scaler);
 		objTG = new TransformGroup(trfm);
-		TransformGroup rotTG =	Commons.rotation(366*k,'z', 0f,(float) Math.PI*2);
+		TransformGroup rotTG =	Commons.rotation(366*k,'y', 0f,(float) Math.PI*2);
 		rotTG.addChild(create_Object());
 		objTG.addChild(rotTG);
 	}
@@ -195,7 +195,7 @@ class Saturn extends ProjectObjects {
 		trfm.mul(translator);
 		trfm.mul(scaler);
 		objTG = new TransformGroup(trfm);
-		TransformGroup rotTG =	Commons.rotation(366*k,'z', 0f,(float) Math.PI*2);
+		TransformGroup rotTG =	Commons.rotation(366*k,'y', 0f,(float) Math.PI*2);
 		rotTG.addChild(create_Object());
 		objTG.addChild(rotTG);
 	}
@@ -243,7 +243,7 @@ class Neptune extends ProjectObjects {
 		trfm.mul(translator);
 		trfm.mul(scaler);
 		objTG = new TransformGroup(trfm);
-		TransformGroup rotTG =	Commons.rotation(366*k,'z', 0f,(float) Math.PI*2);
+		TransformGroup rotTG =	Commons.rotation(366*k,'y', 0f,(float) Math.PI*2);
 		rotTG.addChild(create_Object());
 		objTG.addChild(rotTG);
 	}
@@ -256,4 +256,27 @@ class Neptune extends ProjectObjects {
 		return objTG;
 	}
 }
+
+	class Meteor extends ProjectObjects {
+		private TransformGroup objTG;
+		public Meteor() {
+			Transform3D translator = new Transform3D();	
+			translator.setTranslation(new Vector3f(0f, 0f, 0f));
+			Transform3D scaler = new Transform3D();
+			scaler.setScale(0.1);
+			Transform3D trfm = new Transform3D();
+			trfm.mul(translator);
+			trfm.mul(scaler);
+			objTG = new TransformGroup(trfm);
+			objTG.addChild(create_Object());
+		}
+		
+		public Node create_Object() {
+			return new Sphere(0.5f, Primitive.GENERATE_TEXTURE_COORDS, create_Appearance("meteor", Commons.Grey));
+		}
+		
+		public Node position_Object() {
+			return objTG;
+		}
+	}
 
