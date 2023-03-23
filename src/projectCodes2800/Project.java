@@ -51,7 +51,7 @@ public class Project extends JPanel {
 		// sceneTG.addChild(saturn.position_Object());
 		// sceneTG.addChild(uranus.position_Object());
 		// sceneTG.addChild(neptune.position_Object());
-		// sceneTG.addChild(meteor.position_Object());
+		sceneTG.addChild(meteor.position_Object());
 
 		
 		rotations[0] = Commons.rotation(k,'y', 0f,(float)Math.PI * 2);
