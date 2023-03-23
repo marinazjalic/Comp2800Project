@@ -255,27 +255,28 @@ class Neptune extends ProjectObjects {
 	public Node position_Object() {
 		return objTG;
 	}
-
-class Meteor extends ProjectObjects {
-	private TransformGroup objTG;
-	public Meteor() {
-		Transform3D translator = new Transform3D();	
-		translator.setTranslation(new Vector3f(0f, 0f, 0f));
-		Transform3D scaler = new Transform3D();
-		scaler.setScale(0.1);
-		Transform3D trfm = new Transform3D();
-		trfm.mul(translator);
-		trfm.mul(scaler);
-		objTG = new TransformGroup(trfm);
-		objTG.addChild(create_Object());
-	}
-	
-	public Node create_Object() {
-		return new Sphere(0.5f, Primitive.GENERATE_TEXTURE_COORDS, create_Appearance("meteor", Commons.Grey));
-	}
-	
-	public Node position_Object() {
-		return objTG;
-	}
 }
+
+	class Meteor extends ProjectObjects {
+		private TransformGroup objTG;
+		public Meteor() {
+			Transform3D translator = new Transform3D();	
+			translator.setTranslation(new Vector3f(0f, 0f, 0f));
+			Transform3D scaler = new Transform3D();
+			scaler.setScale(0.1);
+			Transform3D trfm = new Transform3D();
+			trfm.mul(translator);
+			trfm.mul(scaler);
+			objTG = new TransformGroup(trfm);
+			objTG.addChild(create_Object());
+		}
+		
+		public Node create_Object() {
+			return new Sphere(0.5f, Primitive.GENERATE_TEXTURE_COORDS, create_Appearance("meteor", Commons.Grey));
+		}
+		
+		public Node position_Object() {
+			return objTG;
+		}
+	}
 

@@ -42,16 +42,16 @@ public class Project extends JPanel {
 		Meteor meteor = new Meteor();
 		
 
-		sceneTG.addChild(sun.position_Object());
-		sceneTG.addChild(earth.position_Object());
-		sceneTG.addChild(mercury.position_Object());
-		sceneTG.addChild(venus.position_Object());
-		sceneTG.addChild(mars.position_Object());
-		sceneTG.addChild(jupiter.position_Object());
-		sceneTG.addChild(saturn.position_Object());
-		sceneTG.addChild(uranus.position_Object());
-		sceneTG.addChild(neptune.position_Object());
-		sceneTG.addChild(meteor.position_Object());
+		// sceneTG.addChild(sun.position_Object());
+		// sceneTG.addChild(earth.position_Object());
+		// sceneTG.addChild(mercury.position_Object());
+		// sceneTG.addChild(venus.position_Object());
+		// sceneTG.addChild(mars.position_Object());
+		// sceneTG.addChild(jupiter.position_Object());
+		// sceneTG.addChild(saturn.position_Object());
+		// sceneTG.addChild(uranus.position_Object());
+		// sceneTG.addChild(neptune.position_Object());
+		// sceneTG.addChild(meteor.position_Object());
 
 		
 		rotations[0] = Commons.rotation(k,'y', 0f,(float)Math.PI * 2);
