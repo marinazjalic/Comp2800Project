@@ -50,6 +50,8 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 		TransformGroup sceneTG = new TransformGroup();
 		TransformGroup[] rotations = new TransformGroup[8];
 		int k = 2650;//"earth speed" - each rotation is set to be relative to earth days
+		
+		// Create Objects
 		Sun sun = new Sun();
 		Earth earth = new Earth();
 		Mercury mercury = new Mercury();
@@ -62,7 +64,7 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 
 		rotations[0] = Commons.rotation(k,'y', 0f,(float)Math.PI * 2);
 		rotations[0].addChild(earth.position_Object());
-		rotations[0].setCollidable(true);
+		rotations[0].getChild(0).setCollidable(true);
 		
 		rotations[1]= Commons.rotation((int)(k*0.25), 'y', 0f,(float)Math.PI * 2);
 		rotations[1].addChild(mercury.position_Object());
@@ -318,28 +320,16 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mousePressed(MouseEvent e) {}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseReleased(MouseEvent e) {}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseEntered(MouseEvent e) {}
 
 	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseExited(MouseEvent e) {}
 	
 	public void keyPressed(KeyEvent event)	{
 		if ((event.getKeyCode() == KeyEvent.VK_SPACE)) {	//if space bar is pressed
