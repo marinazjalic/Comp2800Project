@@ -3,3 +3,4 @@
 .classpath
 *.prefs
 .vscode/settings.json
+/bin
