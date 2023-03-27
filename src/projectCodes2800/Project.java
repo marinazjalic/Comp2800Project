@@ -145,7 +145,7 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 		myTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
 		Transform3D axisPosition = new Transform3D();
 		axisPosition.rotX(-Math.PI/2);
-		posInterpolator = new PositionInterpolator(new Alpha(-1,5000), myTG, axisPosition, 0, 15f);
+		posInterpolator = new PositionInterpolator(new Alpha(-1,10000), myTG, axisPosition, 0, 15f);
 		posInterpolator.setSchedulingBounds(new BoundingSphere(new Point3d(), 100.0));
 		myTG.addChild(posInterpolator);
 		myTG.addChild(node);
