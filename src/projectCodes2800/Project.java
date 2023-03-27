@@ -5,7 +5,10 @@ import java.awt.BorderLayout;
 import java.awt.GraphicsConfiguration;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.net.URL;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -257,6 +260,23 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 		
 	}
 	
+	//method to play audio clip
+	public static void playAudio(String fileName)
+	{
+		javax.sound.sampled.Clip clip = null;
+		URL url = null;
+		String filename = "src/projectCodes2800/sounds/" + fileName + ".wav";
+		try {
+			url = new URL("file", "localhost", filename);
+			AudioInputStream audio = AudioSystem.getAudioInputStream(url);
+			clip = AudioSystem.getClip();
+			clip.open(audio);
+			clip.start();
+		} catch (Exception e) {
+			System.out.println("Error opening file: " + filename);
+		}	
+	}
+	
 	/* NOTE: Keep the constructor for each of the labs and assignments */
 	public Project(BranchGroup sceneBG) {
 		GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
@@ -344,6 +364,7 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 	public void keyPressed(KeyEvent event)	{
 		if ((event.getKeyCode() == KeyEvent.VK_SPACE)) {	//if space bar is pressed
 			System.out.println("Space bar was pressed.");
+			playAudio("rocket");
 			 
 			//enter logic for what happens to rocket when space bar is pressed here:
 		}
