@@ -8,8 +8,11 @@ package projectCodes2800;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
+import java.net.URL;
 import java.util.*;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -22,7 +25,7 @@ import org.jogamp.java3d.utils.geometry.Primitive;
 import org.jogamp.java3d.utils.universe.*;
 import org.jogamp.vecmath.*;
 
-public class MultiUserGalaxy extends JPanel implements ActionListener {
+public class MultiUserGalaxy extends JPanel implements ActionListener, KeyListener {
 	private static final long serialVersionUID = 1L;	
 	public static boolean multiplayer = false;;
 	static final int width = 600;                            // size of each Canvas3D
@@ -49,6 +52,7 @@ public class MultiUserGalaxy extends JPanel implements ActionListener {
 			if (i > 0)
 				assign4[i] = new Galaxy(canvas3D[i]);
 			add( canvas3D[i] );                            // add 3 Canvas3D to Frame
+			canvas3D[i].addKeyListener(this);
 		}		
 		ViewingPlatform vp = new ViewingPlatform(2);       // a VP with 2 TG about it		
 		Viewer viewer = new Viewer( canvas3D[0] );         // point 1st Viewer to c3D[0]
@@ -171,5 +175,50 @@ public class MultiUserGalaxy extends JPanel implements ActionListener {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+
+//method to play audio clip
+public static void playAudio(String fileName)
+{
+	javax.sound.sampled.Clip clip = null;
+	URL url = null;
+	String filename = "src/projectCodes2800/sounds/" + fileName + ".wav";
+	try {
+		url = new URL("file", "localhost", filename);
+		AudioInputStream audio = AudioSystem.getAudioInputStream(url);
+		clip = AudioSystem.getClip();
+		clip.open(audio);
+		clip.start();
+	} catch (Exception e) {
+		System.out.println("Error opening file: " + filename);
+	}	
+}
+
+	public void keyPressed(KeyEvent event) {
+		if ((event.getKeyCode() == KeyEvent.VK_SPACE)) {	//if space bar is pressed
+			System.out.println("Space bar was pressed.");
+			playAudio("rocket");
+			 
+			//enter logic for what happens to rocket when space bar is pressed here:
+			
+			if(Rocket.movementAlpha.isPaused()){
+				Rocket.movementAlpha.resume();
+            }else{
+            	Rocket.movementAlpha.pause();
+            } 
+		}
+
+
+		if((event.getKeyCode()== KeyEvent.VK_X)){
+			if(Satellite.satelliteSwitch.getWhichChild()==1){
+				Satellite.satelliteSwitch.setWhichChild(0);
+				Satellite.satelliteAlpha.pause();
+			}else{
+				Satellite.satelliteSwitch.setWhichChild(1);
+				Satellite.satelliteAlpha.resume();
+			} 
+		}
+	}
+	public void keyReleased(KeyEvent e) {}
+	public void keyTyped(KeyEvent e) {}
 	
 }	
