@@ -65,7 +65,7 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 	public static BranchGroup create_Scene() {
 		sceneBG = new BranchGroup();
 		TransformGroup sceneTG = new TransformGroup();
-		TransformGroup[] rotations = new TransformGroup[8];
+		TransformGroup[] rotations = new TransformGroup[9];
 		int k = 2650;//"earth speed" - each rotation is set to be relative to earth days
 		Sun sun = new Sun();
 		Earth earth = new Earth();
@@ -76,6 +76,7 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 		Saturn saturn = new Saturn();
 		Uranus uranus = new Uranus();
 		Neptune neptune = new Neptune();
+		Rocket rocket = new Rocket();
 
 		rotations[0] = Commons.rotation(k,'y', 0f,(float)Math.PI * 2);
 		rotations[0].addChild(earth.position_Object());
@@ -100,7 +101,6 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 		rotations[5] = Commons.rotation((int)(k*29.46), 'y', 0f, (float)Math.PI * 2);
 		rotations[5].addChild(saturn.position_Object());
 		rotations[5].setCollidable(true);
-		
 
 		rotations[6] = Commons.rotation((int)(k*84), 'y', 0f, (float)Math.PI * 2);
 		rotations[6].addChild(uranus.position_Object());
@@ -110,11 +110,14 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 		rotations[7].addChild(neptune.position_Object());
 		rotations[7].setCollidable(true);
 		
+		rotations[8] = Commons.rotation(k,'y', 0f,(float)Math.PI * 2);
+		rotations[8].addChild(rocket.position_Object());
+		rotations[8].setCollidable(true);
 		
 		TransformGroup sunTG = new TransformGroup();
 		sunTG.addChild(sun.position_Object());
 
-		for(int i =0; i<8; i++)
+		for(int i = 0; i < 9; i++)
 			sunTG.addChild(rotations[i]);
 		
 		
@@ -300,6 +303,7 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 			canvas3D[i] = new Canvas3D( config );
 			canvas3D[i].setSize( width, height );
 			add( canvas3D[i] );                            // add 3 Canvas3D to Frame
+			canvas3D[i].addKeyListener(this);
 		}		
 		ViewingPlatform vp = new ViewingPlatform(2);       // a VP with 2 TG about it		
 		Viewer viewer = new Viewer( canvas3D[0] );         // point 1st Viewer to c3D[0]
@@ -341,7 +345,7 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 		vp.getViewPlatformTransform( ).setCapability( TransformGroup.ALLOW_TRANSFORM_READ );
 		KeyNavigatorBehavior key = new KeyNavigatorBehavior( vp.getViewPlatformTransform( ) );
 		key.setSchedulingBounds( new BoundingSphere() );          // enable viewer navigation
-		key.setEnable( false );		
+		key.setEnable( true );		
 		vp.addChild( key );                                   // add KeyNavigatorBehavior to VP
 		viewer.setViewingPlatform( vp );                      // set VP for the Viewer	
 		return vp;
@@ -436,6 +440,12 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 			playAudio("rocket");
 			 
 			//enter logic for what happens to rocket when space bar is pressed here:
+			
+			if(Rocket.movementAlpha.isPaused()){
+				Rocket.movementAlpha.resume();
+            }else{
+            	Rocket.movementAlpha.pause();
+            } 
 		}
 	}
 

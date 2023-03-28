@@ -14,7 +14,10 @@ import org.jogamp.java3d.BoundingSphere;
 import org.jogamp.java3d.BranchGroup;
 import org.jogamp.java3d.Canvas3D;
 import org.jogamp.java3d.Material;
+import org.jogamp.java3d.PathInterpolator;
 import org.jogamp.java3d.PointLight;
+import org.jogamp.java3d.PositionInterpolator;
+import org.jogamp.java3d.PositionPathInterpolator;
 import org.jogamp.java3d.RotationInterpolator;
 import org.jogamp.java3d.Transform3D;
 import org.jogamp.java3d.TransformGroup;
@@ -100,6 +103,56 @@ public class Commons extends JPanel {
 		rot_beh.setSchedulingBounds(hundredBS);
 		return rot_beh;
 	}
+	
+	/* a function to create a path behavior and refer it to 'my_TG' */
+	
+	/* public static PositionPathInterpolator path_Behavior(int speed, TransformGroup moveTG) {
+		float[] k = new float[3];
+		k[0] = 0.0f;
+		k[1] = 0.5f;
+		k[2] = 1.0f;
+		
+		Point3f[] path = new Point3f[] {
+			    new Point3f(0.0f, 0.0f, 0.0f),
+			    new Point3f(0.0f, 10.0f, 0.0f),
+			    new Point3f(0.0f, 20.0f, 0.0f)
+			};
+		
+		moveTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+		Transform3D yAxis = new Transform3D();
+		Alpha movementAlpha = new Alpha(-1, speed);
+		PositionPathInterpolator path_beh = new PositionPathInterpolator(movementAlpha, 
+			       moveTG, yAxis, k, path);
+		path_beh.setSchedulingBounds(hundredBS);
+		return path_beh;
+	} */
+	
+	/* public static PositionInterpolator path_Behavior(int speed, TransformGroup moveTG) {
+		moveTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+		Transform3D yAxis = new Transform3D();
+		Alpha movementAlpha = new Alpha(-1, Alpha.INCREASING_ENABLE | Alpha.DECREASING_ENABLE, 0, 0, 0, 2000, 1000, 4000, 2000, 1000);
+		PositionInterpolator path_beh = new PositionInterpolator(movementAlpha, 
+			       moveTG, yAxis, 0.0f, 0.0f);
+		path_beh.setSchedulingBounds(hundredBS);
+		return path_beh;
+	} */
+	
+	/*
+	private static void createContent (TransformGroup scene_TG){
+		TransformGroup baseTG = new TransformGroup();
+		baseTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+		baseTG.addChild(ShapeIndexedQuad.indexedQuadShape(0.6f));
+		Alpha alpha = new Alpha(Ş1, Alpha.INCREASING_ENABLE | Alpha.DECREASING_ENABLE, 0, 0, 0, 2000, 1000, 4000, 2000, 1000);
+		Transform3D axisPosition = newTransform3D();
+		axisPosition.rotZ(Math.PI / 2.0);
+		PositionInterpolator positionInterpol = newPositionInterpolator (alpha,
+		baseTG, axisPosition, Ş0.6f, 0.6f);//createinterpolator
+		positionInterpol.setSchedulingBounds(CommonsXY.boundT);
+		scene_TG.addChild(baseTG);//addbaseTGtoscene
+		scene_TG.addChild(positionInterpol);//addinterpolatortoscene
+	}
+	*/
+	
 	
 	/* a function to place one light or two lights at opposite locations */
 	public static BranchGroup add_Lights(Color3f clr, int p_num) {

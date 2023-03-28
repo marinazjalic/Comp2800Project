@@ -1,12 +1,15 @@
 package projectCodes2800;
 
 import java.io.FileNotFoundException;
+import java.util.Timer;
 
+import org.jogamp.java3d.Alpha;
 import org.jogamp.java3d.Appearance;
 import org.jogamp.java3d.BranchGroup;
 import org.jogamp.java3d.ColoringAttributes;
 import org.jogamp.java3d.ImageComponent2D;
 import org.jogamp.java3d.Node;
+import org.jogamp.java3d.PositionInterpolator;
 import org.jogamp.java3d.Shape3D;
 import org.jogamp.java3d.Texture;
 import org.jogamp.java3d.Texture2D;
@@ -33,7 +36,7 @@ public abstract class ProjectObjects {
 		ObjectFile f = new ObjectFile(flags, (float)(60 * Math.PI/180.0));
 		Scene s = null;
 		try {
-			s = f.load("src\\projectCodes2800\\images\\" + filename + ".obj"); //load ring.obj file.
+			s = f.load("src/projectCodes2800/images/" + filename + ".obj"); //load ring.obj file.
 			
 		}catch (FileNotFoundException e) {
 			System.err.println(e);
@@ -75,6 +78,7 @@ public abstract class ProjectObjects {
 		app.setTexture(loadTextures(imageName));
 		return app;
 	}
+	
 }
 
 class Sun extends ProjectObjects{
@@ -298,19 +302,19 @@ class Neptune extends ProjectObjects {
 	}
 }
 
-	class Meteor extends ProjectObjects {
-		private TransformGroup objTG;
-		public Meteor() {
-			Transform3D translator = new Transform3D();	
-			translator.setTranslation(new Vector3f(0f, 0f, 0f));
-			Transform3D scaler = new Transform3D();
-			scaler.setScale(0.5);
-			Transform3D trfm = new Transform3D();
-			trfm.mul(translator);
-			trfm.mul(scaler);
-			objTG = new TransformGroup(trfm);
-			objTG.addChild(create_Object());
-		}
+class Meteor extends ProjectObjects {
+	private TransformGroup objTG;
+	public Meteor() {
+		Transform3D translator = new Transform3D();	
+		translator.setTranslation(new Vector3f(0f, 0f, 0f));
+		Transform3D scaler = new Transform3D();
+		scaler.setScale(0.5);
+		Transform3D trfm = new Transform3D();
+		trfm.mul(translator);
+		trfm.mul(scaler);
+		objTG = new TransformGroup(trfm);
+		objTG.addChild(create_Object());
+	}
 		
 		public Node create_Object() {
 			Sphere sphere = new Sphere(0.5f, Primitive.GENERATE_TEXTURE_COORDS, create_Appearance("meteor", Commons.Grey));
@@ -323,3 +327,44 @@ class Neptune extends ProjectObjects {
 		}
 	}
 
+class Rocket extends ProjectObjects {
+	private TransformGroup objTG;
+	public static Alpha movementAlpha = new Alpha(1, Alpha.INCREASING_ENABLE, 0, 0, 0, 2000, 1000, 4000, 2000, 1000);
+	public Rocket() {
+		Transform3D translator = new Transform3D();	
+		translator.setTranslation(new Vector3f(2f, 0.75f, 0f));
+		Transform3D scaler = new Transform3D();
+		scaler.setScale(0.7);
+		Transform3D trfm = new Transform3D();
+		trfm.mul(translator);
+		trfm.mul(scaler);
+		objTG = new TransformGroup(trfm);
+	}
+	
+	public Node create_Object() {
+		Transform3D rocketT3 = new Transform3D();
+		rocketT3.rotY(Math.PI);
+		TransformGroup rocketTG = new TransformGroup(rocketT3);
+		rocketTG.addChild(loadShape("Rocket", Commons.obj_Appearance(Commons.Red)));
+		
+		TransformGroup moveTG = new TransformGroup();
+		moveTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+		moveTG.addChild(rocketTG);
+		
+		Transform3D axisPosition = new Transform3D();
+		axisPosition.rotZ(Math.PI / 2.0);
+		PositionInterpolator path_beh = new PositionInterpolator(movementAlpha, moveTG, axisPosition, 60f, 0f);
+		path_beh.setSchedulingBounds(Commons.hundredBS);
+		
+		objTG.addChild(path_beh);
+		objTG.addChild(moveTG);
+		
+		movementAlpha.pause();
+		
+		return objTG;
+	}
+	
+	public Node position_Object() {
+		return create_Object();
+	}
+}
