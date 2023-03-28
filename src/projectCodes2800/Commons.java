@@ -76,8 +76,8 @@ public class Commons extends JPanel {
 //						rot_axis.setTranslation(new Vector3f(5f,5f,0));
 				break;
 			case 'x': rot_axis.rotX(Math.PI/2);
-			
 				break;
+			case 'r': rot_axis.rotX(Math.PI/12);//rotation for saturn to show movement of ring
 			default: break;
 		}
 		Alpha rotationAlpha = new Alpha(-1, r_num);
