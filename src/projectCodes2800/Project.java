@@ -83,6 +83,7 @@ public class Project extends JPanel implements KeyListener, MouseListener, Actio
 		Saturn saturn = new Saturn();
 		Uranus uranus = new Uranus();
 		Neptune neptune = new Neptune();
+		Rocket rocket = new Rocket();
 
 		rotations[0] = Commons.rotation(k,'y', 0f,(float)Math.PI * 2);
 		rotations[0].addChild(earth.position_Object());
@@ -108,7 +109,6 @@ public class Project extends JPanel implements KeyListener, MouseListener, Actio
 		rotations[5] = Commons.rotation((int)(k*29.46), 'y', 0f, (float)Math.PI * 2);
 		rotations[5].addChild(saturn.position_Object());
 		rotations[5].setCollidable(true);
-		
 
 		rotations[6] = Commons.rotation((int)(k*84), 'y', 0f, (float)Math.PI * 2);
 		rotations[6].addChild(uranus.position_Object());
@@ -117,12 +117,17 @@ public class Project extends JPanel implements KeyListener, MouseListener, Actio
 		rotations[7] = Commons.rotation((int)(k*164.8), 'y', 0f, (float)Math.PI * 2);
 		rotations[7].addChild(neptune.position_Object());
 		rotations[7].setCollidable(true);
+		
+		rotations[8] = Commons.rotation(k,'y', 0f,(float)Math.PI * 2);
+		rotations[8].addChild(rocket.position_Object());
+		rotations[8].setCollidable(true);
+		
 
 
 		TransformGroup sunTG = new TransformGroup();
 		sunTG.addChild(sun.position_Object());
 
-		for(int i =0; i<8; i++)
+		for(int i = 0; i < 9; i++)
 			sunTG.addChild(rotations[i]);
 
 			//sunTG.addChild(rotations[9]);
@@ -453,6 +458,12 @@ public class Project extends JPanel implements KeyListener, MouseListener, Actio
 			playAudio("rocket");
 			 
 			//enter logic for what happens to rocket when space bar is pressed here:
+			
+			if(Rocket.movementAlpha.isPaused()){
+				Rocket.movementAlpha.resume();
+            }else{
+            	Rocket.movementAlpha.pause();
+            } 
 		}
 
 
