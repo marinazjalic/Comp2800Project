@@ -105,7 +105,7 @@ public class Galaxy extends JPanel implements KeyListener, MouseListener {
 		TransformGroup sunTG = new TransformGroup();
 		sunTG.addChild(sun.position_Object());
 
-		for(int i =0; i<8; i++)
+		for(int i =0; i<9; i++)
 			sunTG.addChild(rotations[i]);
 		
 		
