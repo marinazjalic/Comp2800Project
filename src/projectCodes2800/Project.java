@@ -2,6 +2,7 @@ package projectCodes2800;
 
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.GraphicsConfiguration;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -13,19 +14,29 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.jogamp.java3d.Alpha;
+import org.jogamp.java3d.Appearance;
 import org.jogamp.java3d.Background;
 import org.jogamp.java3d.BoundingSphere;
 import org.jogamp.java3d.BranchGroup;
 import org.jogamp.java3d.Canvas3D;
 import org.jogamp.java3d.Group;
+import org.jogamp.java3d.Locale;
 import org.jogamp.java3d.Node;
 import org.jogamp.java3d.PositionInterpolator;
 import org.jogamp.java3d.Transform3D;
 import org.jogamp.java3d.TransformGroup;
+import org.jogamp.java3d.utils.behaviors.keyboard.KeyNavigatorBehavior;
+import org.jogamp.java3d.utils.geometry.Box;
+import org.jogamp.java3d.utils.geometry.Cone;
+import org.jogamp.java3d.utils.geometry.Primitive;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.java3d.utils.picking.PickResult;
 import org.jogamp.java3d.utils.picking.PickTool;
+import org.jogamp.java3d.utils.universe.MultiTransformGroup;
 import org.jogamp.java3d.utils.universe.SimpleUniverse;
+import org.jogamp.java3d.utils.universe.Viewer;
+import org.jogamp.java3d.utils.universe.ViewerAvatar;
+import org.jogamp.java3d.utils.universe.ViewingPlatform;
 import org.jogamp.vecmath.Color3f;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
@@ -38,16 +49,19 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 
 	
 	private static final long serialVersionUID = 1L;
-	private static JFrame frame;
-	private static Canvas3D canvas;
-	public static BranchGroup sceneBG;
-	private static PositionInterpolator posInterpolator;
-	private static Transform3D t3d = null;
-	private static TransformGroup meteorTG = null;
-	public static double speed = 0;
-	private static PickTool pickTool;
-	private static boolean isPaused = false; //flag for position interpolator state
-
+	static final int width = 600;                            // size of each Canvas3D
+	static final int height = 600;
+	private Canvas3D[] canvas3D;
+    private static JFrame frame;
+    private static Canvas3D canvas;
+    public static BranchGroup sceneBG;
+    private static PositionInterpolator posInterpolator;
+    private static Transform3D t3d = null;
+    private static TransformGroup meteorTG = null;
+    public static double speed = 0;
+    private static PickTool pickTool;
+    private static boolean isPaused = false; //flag for position interpolator state
+	
 	public static BranchGroup create_Scene() {
 		sceneBG = new BranchGroup();
 		TransformGroup sceneTG = new TransformGroup();
@@ -279,27 +293,82 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 	
 	/* NOTE: Keep the constructor for each of the labs and assignments */
 	public Project(BranchGroup sceneBG) {
-		GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
-		canvas = new Canvas3D(config);
-		canvas.addKeyListener(this);                      
-		canvas.addMouseListener(this);    
-		SimpleUniverse su = new SimpleUniverse(canvas);    // create a SimpleUniverse
-		Commons.define_Viewer(su, new Point3d(5.0d, 5.0d, 5.0d));
-		sceneBG.addChild(Commons.key_Navigation(su));
-		sceneBG.addChild(Commons.key_Navigation(su));     // allow key navigation
+		canvas3D = new Canvas3D[3];
 		
-		sceneBG.compile();		                           // optimize the BranchGroup
-		su.addBranchGraph(sceneBG);                        // attach the scene to SimpleUniverse
+		GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration( );
+		for (int i = 0; i < 3; i++) {
+			canvas3D[i] = new Canvas3D( config );
+			canvas3D[i].setSize( width, height );
+			add( canvas3D[i] );                            // add 3 Canvas3D to Frame
+		}		
+		ViewingPlatform vp = new ViewingPlatform(2);       // a VP with 2 TG about it		
+		Viewer viewer = new Viewer( canvas3D[0] );         // point 1st Viewer to c3D[0]
+		Transform3D t3d = new Transform3D( );
+		t3d.rotX( Math.PI / 2.0 );                         // rotate and position the 1st ~
+		t3d.setTranslation( new Vector3d( 0, 0, -20 ) );   // viewer looking down from top
+		t3d.invert( );
+		MultiTransformGroup mtg = vp.getMultiTransformGroup( );
+		mtg.getTransformGroup(0).setTransform( t3d );
+
+		SimpleUniverse su = new SimpleUniverse(vp, viewer);
+		Locale lcl = su.getLocale();                        // point 2nd/3rd Viewer to c3D[1,2]
+		lcl.addBranchGraph( createViewer( canvas3D[1], "F-L", Commons.Orange, -5, 5, 0 ) );
+		lcl.addBranchGraph( createViewer( canvas3D[2] , "B-R", Commons.Cyan, 5, 5, 0 ) );
 		
-		setLayout(new BorderLayout());
-		add("Center", canvas);
-		frame.setSize(800, 800);                           // set the size of the JFrame
-		frame.setVisible(true);
+		sceneBG.compile();
+		su.addBranchGraph( sceneBG );
+
+	}
+	
+	ViewingPlatform createViewer(Canvas3D canvas3D, String name, Color3f clr, 
+			double x, double y, double z) {		
+		// a Canvas3D can only be attached to a single Viewer
+		Viewer viewer = new Viewer( canvas3D );	             // attach a Viewer to its canvas
+		ViewingPlatform vp = new ViewingPlatform( 1 );       // 1 VP with 1 TG above
+		                                                     // assign PG to the Viewer
+		viewer.setAvatar( createViewerAvatar( name, clr ) ); // assign VA to the Viewer
+
+		Point3d center = new Point3d(0, 0, 0);               // define where the eye looks at
+		Vector3d up = new Vector3d(0, 1, 0);                 // define camera's up direction
+		Transform3D viewTM = new Transform3D();
+		Point3d eye = new Point3d(x, y, z);                  // define eye's location
+		viewTM.lookAt(eye, center, up);
+		viewTM.invert();  
+		vp.getViewPlatformTransform().setTransform(viewTM);  // set VP with 'viewTG'
+
+		// set TG's capabilities to allow KeyNavigatorBehavior modify the Viewer's position
+		vp.getViewPlatformTransform( ).setCapability( TransformGroup.ALLOW_TRANSFORM_WRITE );
+		vp.getViewPlatformTransform( ).setCapability( TransformGroup.ALLOW_TRANSFORM_READ );
+		KeyNavigatorBehavior key = new KeyNavigatorBehavior( vp.getViewPlatformTransform( ) );
+		key.setSchedulingBounds( new BoundingSphere() );          // enable viewer navigation
+		key.setEnable( false );		
+		vp.addChild( key );                                   // add KeyNavigatorBehavior to VP
+		viewer.setViewingPlatform( vp );                      // set VP for the Viewer	
+		return vp;
+	}
+
+	/* a function to create and position a simple Cone to represent the Viewer */
+	ViewerAvatar createViewerAvatar( String szText, Color3f objColor ) {
+		ViewerAvatar viewerAvatar = new ViewerAvatar( );
+		// lay down the Cone, pointing sharp-end towards the Viewer's field of view
+		TransformGroup tg = new TransformGroup( );
+		Transform3D t3d = new Transform3D( );
+		t3d.setEuler( new Vector3d( Math.PI / 2.0, Math.PI, 0 ) );
+		tg.setTransform( t3d );
+		
+		Appearance app = Commons.obj_Appearance(objColor);
+		
+		tg.addChild( new Cone( 0.5f, 1.5f, Primitive.GENERATE_NORMALS, app ) );
+		viewerAvatar.addChild( tg );                         // add Cone to parent BranchGroup
+
+		return viewerAvatar;
 	}
 	
 	public static void main(String[] args) {
-		frame = new JFrame("Group Project - Galaxy");                   // NOTE: change XY to student's initials
+		JFrame frame = new JFrame("Group Project - Galaxy");                // NOTE: change XY to student's initials
 		frame.getContentPane().add(new Project(create_Scene()));  // create an instance of the class
+		frame.setSize(1910, height + 40);                         // set the size of the JFrame
+		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
