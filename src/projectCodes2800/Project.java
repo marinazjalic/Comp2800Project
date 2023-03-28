@@ -55,6 +55,7 @@ public class Project extends JPanel implements KeyListener, MouseListener, Actio
 	static final int width = 600;                            // size of each Canvas3D
 	static final int height = 600;
 	private Canvas3D[] canvas3D;
+    private static JFrame frame;
     private static Canvas3D canvas;
     public static BranchGroup sceneBG;
     private static PositionInterpolator posInterpolator;
@@ -63,13 +64,15 @@ public class Project extends JPanel implements KeyListener, MouseListener, Actio
     public static double speed = 0;
     private static PickTool pickTool;
     private static boolean isPaused = false; //flag for position interpolator state
+	public static Satellite satellite = new Satellite();
+
     Hashtable<String, MouseListener> m_MouseHashtable = null;
     Hashtable<String, KeyNavigatorBehavior>	m_KeyHashtable = null;
 	
 	public static BranchGroup create_Scene() {
 		sceneBG = new BranchGroup();
 		TransformGroup sceneTG = new TransformGroup();
-		TransformGroup[] rotations = new TransformGroup[8];
+		TransformGroup[] rotations = new TransformGroup[10];
 		int k = 2650;//"earth speed" - each rotation is set to be relative to earth days
 		Sun sun = new Sun();
 		Earth earth = new Earth();
@@ -85,6 +88,7 @@ public class Project extends JPanel implements KeyListener, MouseListener, Actio
 		rotations[0].addChild(earth.position_Object());
 		rotations[0].setCollidable(true);
 		
+
 		rotations[1]= Commons.rotation((int)(k*0.25), 'y', 0f,(float)Math.PI * 2);
 		rotations[1].addChild(mercury.position_Object());
 		rotations[1].setCollidable(true);
@@ -113,15 +117,15 @@ public class Project extends JPanel implements KeyListener, MouseListener, Actio
 		rotations[7] = Commons.rotation((int)(k*164.8), 'y', 0f, (float)Math.PI * 2);
 		rotations[7].addChild(neptune.position_Object());
 		rotations[7].setCollidable(true);
-		
-		
+
+
 		TransformGroup sunTG = new TransformGroup();
 		sunTG.addChild(sun.position_Object());
 
 		for(int i =0; i<8; i++)
 			sunTG.addChild(rotations[i]);
-		
-		
+
+			//sunTG.addChild(rotations[9]);
 		//add meteor and collision detection
 		TransformGroup mTG = new TransformGroup();
 		mTG.addChild(pathInterpolator(create_meteors()));
@@ -178,7 +182,7 @@ public class Project extends JPanel implements KeyListener, MouseListener, Actio
 		meteorTG = new TransformGroup();
 		t3d = new Transform3D();
 		t3d.setTranslation(new Vector3d(1,0,0));
-		t3d.setScale(1.3);
+		t3d.setScale(0.5);
 		meteorTG.setTransform(t3d);
 		
 		meteorTG.addChild(create_meteor(0.05*Math.random(), -0.05*Math.random(), 0.05*Math.random(), Math.random()));
@@ -305,6 +309,7 @@ public class Project extends JPanel implements KeyListener, MouseListener, Actio
 			canvas3D[i] = new Canvas3D( config );
 			canvas3D[i].setSize( width, height );
 			add( canvas3D[i] );                            // add 3 Canvas3D to Frame
+			canvas3D[i].addKeyListener(this);
 		}		
 		ViewingPlatform vp = new ViewingPlatform(2);       // a VP with 2 TG about it		
 		Viewer viewer = new Viewer( canvas3D[0] );         // point 1st Viewer to c3D[0]
@@ -346,7 +351,7 @@ public class Project extends JPanel implements KeyListener, MouseListener, Actio
 		vp.getViewPlatformTransform( ).setCapability( TransformGroup.ALLOW_TRANSFORM_READ );
 		KeyNavigatorBehavior key = new KeyNavigatorBehavior( vp.getViewPlatformTransform( ) );
 		key.setSchedulingBounds( new BoundingSphere() );          // enable viewer navigation
-		key.setEnable( false );		
+		key.setEnable( true );		
 		vp.addChild( key );                                   // add KeyNavigatorBehavior to VP
 		viewer.setViewingPlatform( vp );                      // set VP for the Viewer	
 		m_KeyHashtable.put(name, key);
@@ -394,7 +399,7 @@ public class Project extends JPanel implements KeyListener, MouseListener, Actio
 			}
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Group Project - Galaxy");                // NOTE: change XY to student's initials
 		frame.getContentPane().add(new Project(create_Scene()));  // create an instance of the class
@@ -437,29 +442,10 @@ public class Project extends JPanel implements KeyListener, MouseListener, Actio
 		}	
 	}
 
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mousePressed(MouseEvent e) {}
+	public void mouseReleased(MouseEvent e) {}
+	public void mouseEntered(MouseEvent e) {}
+	public void mouseExited(MouseEvent e) {}
 	
 	public void keyPressed(KeyEvent event)	{
 		if ((event.getKeyCode() == KeyEvent.VK_SPACE)) {	//if space bar is pressed
@@ -468,8 +454,18 @@ public class Project extends JPanel implements KeyListener, MouseListener, Actio
 			 
 			//enter logic for what happens to rocket when space bar is pressed here:
 		}
-	}
 
+
+		if((event.getKeyCode()== KeyEvent.VK_X)){
+			if(Satellite.satelliteSwitch.getWhichChild()==1){
+				Satellite.satelliteSwitch.setWhichChild(0);
+				Satellite.satelliteAlpha.pause();
+			}else{
+				Satellite.satelliteSwitch.setWhichChild(1);
+				Satellite.satelliteAlpha.resume();
+			} 
+		}
+	}
 	public void keyReleased(KeyEvent e) {}
 	public void keyTyped(KeyEvent e) {}
 
