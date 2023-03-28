@@ -13,13 +13,16 @@ import javax.sound.sampled.AudioSystem;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.jogamp.java3d.Alpha;
 import org.jogamp.java3d.Appearance;
 import org.jogamp.java3d.Background;
 import org.jogamp.java3d.BoundingSphere;
 import org.jogamp.java3d.BranchGroup;
 import org.jogamp.java3d.Canvas3D;
+import org.jogamp.java3d.Group;
 import org.jogamp.java3d.Locale;
 import org.jogamp.java3d.Node;
+import org.jogamp.java3d.PositionInterpolator;
 import org.jogamp.java3d.Transform3D;
 import org.jogamp.java3d.TransformGroup;
 import org.jogamp.java3d.utils.behaviors.keyboard.KeyNavigatorBehavior;
@@ -27,6 +30,8 @@ import org.jogamp.java3d.utils.geometry.Box;
 import org.jogamp.java3d.utils.geometry.Cone;
 import org.jogamp.java3d.utils.geometry.Primitive;
 import org.jogamp.java3d.utils.image.TextureLoader;
+import org.jogamp.java3d.utils.picking.PickResult;
+import org.jogamp.java3d.utils.picking.PickTool;
 import org.jogamp.java3d.utils.universe.MultiTransformGroup;
 import org.jogamp.java3d.utils.universe.SimpleUniverse;
 import org.jogamp.java3d.utils.universe.Viewer;
@@ -35,6 +40,7 @@ import org.jogamp.java3d.utils.universe.ViewingPlatform;
 import org.jogamp.vecmath.Color3f;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
+import org.jogamp.vecmath.Vector3f;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -46,6 +52,15 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 	static final int width = 600;                            // size of each Canvas3D
 	static final int height = 600;
 	private Canvas3D[] canvas3D;
+    private static JFrame frame;
+    private static Canvas3D canvas;
+    public static BranchGroup sceneBG;
+    private static PositionInterpolator posInterpolator;
+    private static Transform3D t3d = null;
+    private static TransformGroup meteorTG = null;
+    public static double speed = 0;
+    private static PickTool pickTool;
+    private static boolean isPaused = false; //flag for position interpolator state
 	
 	public static BranchGroup create_Scene() {
 		sceneBG = new BranchGroup();
