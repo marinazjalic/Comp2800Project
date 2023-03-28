@@ -34,6 +34,7 @@ public class CollisionDetection extends Behavior{
 		
 		if(inCollision) { 
 			Project.speed = 0.5; //change speed to trigger explosion
+			Project.playAudio("explosion"); //play explosion sound
 			wakeupOn(wExit);
 		}
 	}
