@@ -329,7 +329,7 @@ class Meteor extends ProjectObjects {
 
 class Rocket extends ProjectObjects {
 	private TransformGroup objTG;
-	public static Alpha movementAlpha = new Alpha(1, Alpha.INCREASING_ENABLE, 0, 0, 0, 2000, 1000, 4000, 2000, 1000);
+	public static Alpha movementAlpha = new Alpha(1, Alpha.INCREASING_ENABLE | Alpha.DECREASING_ENABLE, 0, 0, 0, 2000, 1000, 4000, 2000, 1000);
 	public Rocket() {
 		Transform3D translator = new Transform3D();	
 		translator.setTranslation(new Vector3f(2f, 0.75f, 0f));
