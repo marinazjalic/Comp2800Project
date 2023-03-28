@@ -125,7 +125,7 @@ class Satellite extends ProjectObjects {
 		trfm[0].addChild(body);
 		
 
-		// create shpere
+		// create sphere
 		tr3D[2] = new Transform3D();
 		tr3D[2].setScale(-0.1);
 		tr3D[2].setTranslation(new Vector3f(0f, 1.1f, 0));		
