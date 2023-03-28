@@ -7,6 +7,7 @@ import java.awt.GraphicsConfiguration;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.URL;
+import java.util.Hashtable;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -42,17 +43,18 @@ import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 import org.jogamp.vecmath.Vector3f;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class Project extends JPanel implements KeyListener, MouseListener {
+public class Project extends JPanel implements KeyListener, MouseListener, ActionListener {
 
 	
 	private static final long serialVersionUID = 1L;
 	static final int width = 600;                            // size of each Canvas3D
 	static final int height = 600;
 	private Canvas3D[] canvas3D;
-    private static JFrame frame;
     private static Canvas3D canvas;
     public static BranchGroup sceneBG;
     private static PositionInterpolator posInterpolator;
@@ -61,6 +63,8 @@ public class Project extends JPanel implements KeyListener, MouseListener {
     public static double speed = 0;
     private static PickTool pickTool;
     private static boolean isPaused = false; //flag for position interpolator state
+    Hashtable<String, MouseListener> m_MouseHashtable = null;
+    Hashtable<String, KeyNavigatorBehavior>	m_KeyHashtable = null;
 	
 	public static BranchGroup create_Scene() {
 		sceneBG = new BranchGroup();
@@ -293,6 +297,7 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 	
 	/* NOTE: Keep the constructor for each of the labs and assignments */
 	public Project(BranchGroup sceneBG) {
+		m_KeyHashtable = new Hashtable<String, KeyNavigatorBehavior>( );
 		canvas3D = new Canvas3D[3];
 		
 		GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration( );
@@ -312,8 +317,8 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 
 		SimpleUniverse su = new SimpleUniverse(vp, viewer);
 		Locale lcl = su.getLocale();                        // point 2nd/3rd Viewer to c3D[1,2]
-		lcl.addBranchGraph( createViewer( canvas3D[1], "F-L", Commons.Orange, -5, 5, 0 ) );
-		lcl.addBranchGraph( createViewer( canvas3D[2] , "B-R", Commons.Cyan, 5, 5, 0 ) );
+		lcl.addBranchGraph( createViewer( canvas3D[1], "Left", Commons.Orange, -5, 5, 0 ) );
+		lcl.addBranchGraph( createViewer( canvas3D[2] , "Right", Commons.Cyan, 5, 5, 0 ) );
 		
 		sceneBG.compile();
 		su.addBranchGraph( sceneBG );
@@ -344,6 +349,10 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 		key.setEnable( false );		
 		vp.addChild( key );                                   // add KeyNavigatorBehavior to VP
 		viewer.setViewingPlatform( vp );                      // set VP for the Viewer	
+		m_KeyHashtable.put(name, key);
+		Button button = new Button(name);
+		button.addActionListener(this);
+		add(button);
 		return vp;
 	}
 
@@ -358,10 +367,32 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 		
 		Appearance app = Commons.obj_Appearance(objColor);
 		
-		tg.addChild( new Cone( 0.5f, 1.5f, Primitive.GENERATE_NORMALS, app ) );
+		tg.addChild( new Cone( 0.1f, 0.25f, Primitive.GENERATE_NORMALS, app ) );
 		viewerAvatar.addChild( tg );                         // add Cone to parent BranchGroup
 
 		return viewerAvatar;
+	}
+	
+	public void actionPerformed( ActionEvent event ) {
+		KeyNavigatorBehavior key = (KeyNavigatorBehavior)m_KeyHashtable.get(event.getActionCommand());
+		Object[] keysArray = m_KeyHashtable.values( ).toArray( );
+		for( int n = 0; n < keysArray.length; n++ )	{
+			KeyNavigatorBehavior keyAtIndex = (KeyNavigatorBehavior) keysArray[n];
+			keyAtIndex.setEnable( keyAtIndex == key );
+			if( keyAtIndex == key ) {
+				System.out.println("Enabled: " + event.getActionCommand());
+				if( keyAtIndex == key ) {
+					if (n == 1) {
+						System.out.println("Right");
+						key.setEnable( true );	
+					}
+					else {
+						System.out.println("Left");
+						key.setEnable( true );	
+					}
+				}
+			}
+		}
 	}
 	
 	public static void main(String[] args) {
