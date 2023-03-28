@@ -398,7 +398,7 @@ public class Project extends JPanel implements KeyListener, MouseListener, Actio
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Group Project - Galaxy");                // NOTE: change XY to student's initials
 		frame.getContentPane().add(new Project(create_Scene()));  // create an instance of the class
-		frame.setSize(1910, height + 40);                         // set the size of the JFrame
+		frame.setSize(1920, height + 40);                         // set the size of the JFrame
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
