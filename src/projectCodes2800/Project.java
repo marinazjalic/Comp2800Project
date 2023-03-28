@@ -55,6 +55,7 @@ public class Project extends JPanel implements KeyListener, MouseListener, Actio
 	static final int width = 600;                            // size of each Canvas3D
 	static final int height = 600;
 	private Canvas3D[] canvas3D;
+    private static JFrame frame;
     private static Canvas3D canvas;
     public static BranchGroup sceneBG;
     private static PositionInterpolator posInterpolator;
@@ -116,8 +117,8 @@ public class Project extends JPanel implements KeyListener, MouseListener, Actio
 		rotations[7] = Commons.rotation((int)(k*164.8), 'y', 0f, (float)Math.PI * 2);
 		rotations[7].addChild(neptune.position_Object());
 		rotations[7].setCollidable(true);
-		
-		
+
+
 		TransformGroup sunTG = new TransformGroup();
 		sunTG.addChild(sun.position_Object());
 
@@ -398,7 +399,7 @@ public class Project extends JPanel implements KeyListener, MouseListener, Actio
 			}
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Group Project - Galaxy");                // NOTE: change XY to student's initials
 		frame.getContentPane().add(new Project(create_Scene()));  // create an instance of the class
