@@ -66,6 +66,28 @@ public class Commons extends JPanel {
 		return app;
 	}	
 	
+	public static TransformGroup rotation(int r_num, char axis, float min, float max, Alpha alpha) {
+		TransformGroup rotTG = new TransformGroup();
+		Transform3D rot_axis = new Transform3D();
+
+		rotTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+		switch (axis){
+			case 'z': rot_axis.rotZ(Math.PI/2);
+//						rot_axis.setTranslation(new Vector3f(5f,5f,0));
+				break;
+			case 'x': rot_axis.rotX(Math.PI/2);
+				break;
+			case 'r': rot_axis.rotX(Math.PI/12);//rotation for saturn to show movement of ring
+			default: break;
+		}
+		RotationInterpolator rot_beh = new RotationInterpolator(alpha, rotTG, rot_axis, min, max);
+		rot_beh.setSchedulingBounds(hundredBS);
+		rotTG.addChild(rot_beh);
+		//rotTG.setTransform(trfm);
+		
+		return rotTG;
+	}
+
 	public static TransformGroup rotation(int r_num, char axis, float min, float max) {
 		TransformGroup rotTG = new TransformGroup();
 		Transform3D rot_axis = new Transform3D();

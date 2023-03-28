@@ -90,40 +90,38 @@ public abstract class ProjectObjects {
 class Satellite extends ProjectObjects {
 	public static Alpha satelliteAlpha = new Alpha();
 	public static Switch satelliteSwitch = new Switch();
+
+	private TransformGroup createWings(){
+
+		TransformGroup rotTG =	Commons.rotation(366*k,'y', 0f,(float) Math.PI*2, satelliteAlpha);
+
+
+		Transform3D wing3D = new Transform3D();
+		wing3D.setScale(1.1);
+		wing3D.setTranslation(new Vector3f(0f, -0.5f, 0f));
+		TransformGroup wingTG = new TransformGroup(wing3D);
+		wingTG.addChild(loadShape("Satellite", Commons.obj_Appearance(Commons.Blue)));
+		
+		rotTG.addChild(wingTG);
+		return rotTG;
+	}
+
 	protected Node create_Object() {
 		
 		TransformGroup[] trfm = new TransformGroup[3];
 		BranchGroup body = loadShape("Satellite-Body", Commons.obj_Appearance(new Color3f(99, 90, 73)));
-		BranchGroup satellite = loadShape("Satellite", Commons.obj_Appearance(Commons.Blue));
 		BranchGroup sphereRed = loadShape("Sphere", Commons.obj_Appearance(Commons.Red));
 		BranchGroup sphereGreen = loadShape("Sphere", Commons.obj_Appearance(Commons.Green));
 
 		Transform3D[] tr3D = new Transform3D[3];
 		// Create Body
 		tr3D[0] = new Transform3D();
-		tr3D[0].setScale(0.1);
-		tr3D[0].setTranslation(new Vector3f(0f, 0f, 0));
+		tr3D[0].setScale(-1.1);
+		tr3D[0].rotX(Math.PI/2);
+		tr3D[0].setTranslation(new Vector3f(-2f, 1f, 1));
 		trfm[0] = new TransformGroup(tr3D[0]);
 		trfm[0].addChild(body);
 		
-		// create satellite (wings)
-		TransformGroup rotTG = new TransformGroup();
-
-		
-		tr3D[1] = new Transform3D();
-		tr3D[1].setScale(1.1);
-		tr3D[1].setTranslation(new Vector3f(0f, -0.5f, 0f));
-	
-		rotTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-		
-		RotationInterpolator rot_beh = new RotationInterpolator(satelliteAlpha, rotTG, tr3D[1], 0.0f, (float)Math.PI *  2.0f);
-		rot_beh.setSchedulingBounds(Commons.hundredBS);
-		rotTG.addChild(rot_beh);
-
-
-		trfm[1] = new TransformGroup(tr3D[1]);
-		trfm[1].addChild(satellite);
-		rotTG.addChild(trfm[1]);
 
 		// create shpere
 		tr3D[2] = new Transform3D();
@@ -135,24 +133,18 @@ class Satellite extends ProjectObjects {
 		satelliteSwitch.addChild(sphereRed);
 		satelliteSwitch.addChild(sphereGreen);
 
-		satelliteSwitch.setWhichChild(0);
+		satelliteSwitch.setWhichChild(1);
 		trfm[2].addChild(satelliteSwitch);
 
 
 		//attach satellite and sphere to body
-		trfm[0].addChild(rotTG);
+		trfm[0].addChild(createWings());
 		trfm[0].addChild(trfm[2]);
 
-		TransformGroup satelliteTG = new TransformGroup();
+		Transform3D satellite3D = new Transform3D();
+		satellite3D.setScale(0.4);
+		TransformGroup  satelliteTG = new TransformGroup(satellite3D);
 		satelliteTG.addChild(trfm[0]);
-
-		Transform3D satellitePos = new Transform3D();
-		satellitePos.setTranslation(new Vector3f(0,1f,0));
-
-
-
-
-		satelliteTG.setTransform(satellitePos);
 		return satelliteTG;
 	}
 
@@ -189,6 +181,7 @@ class Earth extends ProjectObjects {
 		objTG = new TransformGroup(trfm);
 		TransformGroup rotTG =	Commons.rotation(366*k,'y', 0f,(float) Math.PI*2);
 		rotTG.addChild(create_Object());
+		objTG.addChild(new Satellite().position_Object());
 		objTG.addChild(rotTG);
 	}
 	

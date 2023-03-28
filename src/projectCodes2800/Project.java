@@ -66,7 +66,7 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 	public static BranchGroup create_Scene() {
 		sceneBG = new BranchGroup();
 		TransformGroup sceneTG = new TransformGroup();
-		TransformGroup[] rotations = new TransformGroup[9];
+		TransformGroup[] rotations = new TransformGroup[10];
 		int k = 2650;//"earth speed" - each rotation is set to be relative to earth days
 		Sun sun = new Sun();
 		Earth earth = new Earth();
@@ -78,14 +78,9 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 		Uranus uranus = new Uranus();
 		Neptune neptune = new Neptune();
 
-		//rotations[8] = Commons.rotation(k,'y', 0f,(float)Math.PI * 2);
-		//rotations[8].addChild(satellite.position_Object());
-		rotations[8] = (TransformGroup)satellite.position_Object();
-
 		rotations[0] = Commons.rotation(k,'y', 0f,(float)Math.PI * 2);
 		rotations[0].addChild(earth.position_Object());
 		rotations[0].setCollidable(true);
-		rotations[0].addChild(rotations[8]);
 		
 
 		rotations[1]= Commons.rotation((int)(k*0.25), 'y', 0f,(float)Math.PI * 2);
@@ -116,15 +111,19 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 		rotations[7] = Commons.rotation((int)(k*164.8), 'y', 0f, (float)Math.PI * 2);
 		rotations[7].addChild(neptune.position_Object());
 		rotations[7].setCollidable(true);
+
+
+		// rotations[9] = Commons.rotation(k,'y', 0f,(float)Math.PI * 2);
+		// rotations[9] = (TransformGroup)satellite.position_Object();
 		
 		
 		TransformGroup sunTG = new TransformGroup();
 		sunTG.addChild(sun.position_Object());
 
-		for(int i =0; i<9; i++)
+		for(int i =0; i<8; i++)
 			sunTG.addChild(rotations[i]);
-		
-		
+
+			//sunTG.addChild(rotations[9]);
 		//add meteor and collision detection
 		TransformGroup mTG = new TransformGroup();
 		mTG.addChild(pathInterpolator(create_meteors()));
@@ -349,7 +348,7 @@ public class Project extends JPanel implements KeyListener, MouseListener {
 		vp.getViewPlatformTransform( ).setCapability( TransformGroup.ALLOW_TRANSFORM_READ );
 		KeyNavigatorBehavior key = new KeyNavigatorBehavior( vp.getViewPlatformTransform( ) );
 		key.setSchedulingBounds( new BoundingSphere() );          // enable viewer navigation
-		key.setEnable( false );		
+		key.setEnable( true );		
 		vp.addChild( key );                                   // add KeyNavigatorBehavior to VP
 		viewer.setViewingPlatform( vp );                      // set VP for the Viewer	
 		return vp;
