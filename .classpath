@@ -12,5 +12,6 @@
 	<classpathentry kind="lib" path="C:/Jars4Java3D/j3dutils.jar"/>
 	<classpathentry kind="lib" path="C:/Jars4Java3D/jogamp-fat.jar"/>
 	<classpathentry kind="lib" path="C:/Jars4Java3D/vecmath.jar"/>
+	//test
 	<classpathentry kind="output" path="bin"/>
 </classpath>
