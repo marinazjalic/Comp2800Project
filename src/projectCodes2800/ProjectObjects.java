@@ -33,7 +33,7 @@ public abstract class ProjectObjects {
 		ObjectFile f = new ObjectFile(flags, (float)(60 * Math.PI/180.0));
 		Scene s = null;
 		try {
-			s = f.load("src\\projectCodes2800\\images\\" + filename + ".obj"); //load ring.obj file.
+			s = f.load("src/projectCodes2800/images/" + filename + ".obj"); //load ring.obj file.
 			
 		}catch (FileNotFoundException e) {
 			System.err.println(e);
