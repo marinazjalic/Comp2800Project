@@ -2,12 +2,16 @@ package projectCodes2800;
 
 import java.io.FileNotFoundException;
 
+
+import org.jogamp.java3d.Alpha;
 import org.jogamp.java3d.Appearance;
 import org.jogamp.java3d.BranchGroup;
 import org.jogamp.java3d.ColoringAttributes;
 import org.jogamp.java3d.ImageComponent2D;
 import org.jogamp.java3d.Node;
+import org.jogamp.java3d.RotationInterpolator;
 import org.jogamp.java3d.Shape3D;
+import org.jogamp.java3d.Switch;
 import org.jogamp.java3d.Texture;
 import org.jogamp.java3d.Texture2D;
 import org.jogamp.java3d.Transform3D;
@@ -28,6 +32,10 @@ public abstract class ProjectObjects {
 	protected abstract Node position_Object();
 	protected static int k = 4;//rotation scaling 
 	
+	protected static BranchGroup loadShape(String filename){
+		return loadShape(filename, new Appearance());
+	}
+
 	protected static BranchGroup loadShape(String filename, Appearance app) {
 		int flags = ObjectFile.RESIZE | ObjectFile.TRIANGULATE | ObjectFile.STRIPIFY;
 		ObjectFile f = new ObjectFile(flags, (float)(60 * Math.PI/180.0));
@@ -45,6 +53,8 @@ public abstract class ProjectObjects {
 			System.err.println(e);
 			System.exit(1);
 		}
+
+		f.setBasePath("src/projectCodes2800/images/");
 		
 		BranchGroup objBG = s.getSceneGroup();
 		Shape3D ringShape = (Shape3D)objBG.getChild(0);
@@ -75,6 +85,82 @@ public abstract class ProjectObjects {
 		app.setTexture(loadTextures(imageName));
 		return app;
 	}
+}
+
+class Satellite extends ProjectObjects {
+	public static Alpha satelliteAlpha = new Alpha();
+	public static Switch satelliteSwitch = new Switch();
+	protected Node create_Object() {
+		
+		TransformGroup[] trfm = new TransformGroup[3];
+		BranchGroup body = loadShape("Satellite-Body", Commons.obj_Appearance(new Color3f(99, 90, 73)));
+		BranchGroup satellite = loadShape("Satellite", Commons.obj_Appearance(Commons.Blue));
+		BranchGroup sphereRed = loadShape("Sphere", Commons.obj_Appearance(Commons.Red));
+		BranchGroup sphereGreen = loadShape("Sphere", Commons.obj_Appearance(Commons.Green));
+
+		Transform3D[] tr3D = new Transform3D[3];
+		// Create Body
+		tr3D[0] = new Transform3D();
+		tr3D[0].setScale(0.1);
+		tr3D[0].setTranslation(new Vector3f(0f, 0f, 0));
+		trfm[0] = new TransformGroup(tr3D[0]);
+		trfm[0].addChild(body);
+		
+		// create satellite (wings)
+		TransformGroup rotTG = new TransformGroup();
+
+		
+		tr3D[1] = new Transform3D();
+		tr3D[1].setScale(1.1);
+		tr3D[1].setTranslation(new Vector3f(0f, -0.5f, 0f));
+	
+		rotTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+		
+		RotationInterpolator rot_beh = new RotationInterpolator(satelliteAlpha, rotTG, tr3D[1], 0.0f, (float)Math.PI *  2.0f);
+		rot_beh.setSchedulingBounds(Commons.hundredBS);
+		rotTG.addChild(rot_beh);
+
+
+		trfm[1] = new TransformGroup(tr3D[1]);
+		trfm[1].addChild(satellite);
+		rotTG.addChild(trfm[1]);
+
+		// create shpere
+		tr3D[2] = new Transform3D();
+		tr3D[2].setScale(-0.1);
+		tr3D[2].setTranslation(new Vector3f(0f, 1.1f, 0));		
+		trfm[2] = new TransformGroup(tr3D[2]);
+
+		satelliteSwitch.setCapability(Switch.ALLOW_SWITCH_WRITE);
+		satelliteSwitch.addChild(sphereRed);
+		satelliteSwitch.addChild(sphereGreen);
+
+		satelliteSwitch.setWhichChild(0);
+		trfm[2].addChild(satelliteSwitch);
+
+
+		//attach satellite and sphere to body
+		trfm[0].addChild(rotTG);
+		trfm[0].addChild(trfm[2]);
+
+		TransformGroup satelliteTG = new TransformGroup();
+		satelliteTG.addChild(trfm[0]);
+
+		Transform3D satellitePos = new Transform3D();
+		satellitePos.setTranslation(new Vector3f(0,1f,0));
+
+
+
+
+		satelliteTG.setTransform(satellitePos);
+		return satelliteTG;
+	}
+
+
+	protected Node position_Object() {
+		return create_Object();
+	}
+	
 }
 
 class Sun extends ProjectObjects{
