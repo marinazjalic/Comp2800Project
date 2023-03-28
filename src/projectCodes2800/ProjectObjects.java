@@ -411,7 +411,7 @@ class Rocket extends ProjectObjects {
 		Transform3D translator = new Transform3D();	
 		translator.setTranslation(new Vector3f(2f, 0.75f, 0f));
 		Transform3D scaler = new Transform3D();
-		scaler.setScale(0.7);
+		scaler.setScale(0.3);
 		Transform3D trfm = new Transform3D();
 		trfm.mul(translator);
 		trfm.mul(scaler);
