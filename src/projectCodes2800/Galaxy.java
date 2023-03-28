@@ -46,11 +46,12 @@ public class Galaxy extends JPanel implements KeyListener, MouseListener {
 	public static double speed = 0;
 	private static PickTool pickTool;
 	private static boolean isPaused = false; //flag for position interpolator state
+	public static Satellite satellite = new Satellite();
 
 	public static BranchGroup create_Scene() {
 		sceneBG = new BranchGroup();
 		TransformGroup sceneTG = new TransformGroup();
-		TransformGroup[] rotations = new TransformGroup[8];
+		TransformGroup[] rotations = new TransformGroup[10];
 		int k = 2650;//"earth speed" - each rotation is set to be relative to earth days
 		Sun sun = new Sun();
 		Earth earth = new Earth();
@@ -61,6 +62,7 @@ public class Galaxy extends JPanel implements KeyListener, MouseListener {
 		Saturn saturn = new Saturn();
 		Uranus uranus = new Uranus();
 		Neptune neptune = new Neptune();
+		Rocket rocket = new Rocket();
 
 		rotations[0] = Commons.rotation(k,'y', 0f,(float)Math.PI * 2);
 		rotations[0].addChild(earth.position_Object());
@@ -94,6 +96,10 @@ public class Galaxy extends JPanel implements KeyListener, MouseListener {
 		rotations[7] = Commons.rotation((int)(k*164.8), 'y', 0f, (float)Math.PI * 2);
 		rotations[7].addChild(neptune.position_Object());
 		rotations[7].setCollidable(true);
+		
+		rotations[8] = Commons.rotation(k,'y', 0f,(float)Math.PI * 2);
+		rotations[8].addChild(rocket.position_Object());
+		rotations[8].setCollidable(true);
 		
 		
 		TransformGroup sunTG = new TransformGroup();
@@ -147,7 +153,7 @@ public class Galaxy extends JPanel implements KeyListener, MouseListener {
 		myTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
 		Transform3D axisPosition = new Transform3D();
 		axisPosition.rotX(-Math.PI/2);
-		posInterpolator = new PositionInterpolator(new Alpha(-1,10000), myTG, axisPosition, 0, 15f);
+		posInterpolator = new PositionInterpolator(new Alpha(-1,12000), myTG, axisPosition, 0, 15f);
 		posInterpolator.setSchedulingBounds(new BoundingSphere(new Point3d(), 100.0));
 		myTG.addChild(posInterpolator);
 		myTG.addChild(node);
@@ -370,9 +376,25 @@ public class Galaxy extends JPanel implements KeyListener, MouseListener {
 			playAudio("rocket");
 			 
 			//enter logic for what happens to rocket when space bar is pressed here:
+			
+			if(Rocket.movementAlpha.isPaused()){
+				Rocket.movementAlpha.resume();
+            }else{
+            	Rocket.movementAlpha.pause();
+            } 
+		}
+
+
+		if((event.getKeyCode()== KeyEvent.VK_X)){
+			if(Satellite.satelliteSwitch.getWhichChild()==1){
+				Satellite.satelliteSwitch.setWhichChild(0);
+				Satellite.satelliteAlpha.pause();
+			}else{
+				Satellite.satelliteSwitch.setWhichChild(1);
+				Satellite.satelliteAlpha.resume();
+			} 
 		}
 	}
-
 	public void keyReleased(KeyEvent e) {}
 	public void keyTyped(KeyEvent e) {}
 
