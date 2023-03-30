@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-19">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/OpenJDK 11.0.17 [11.0.17]">
 		<attributes>
 			<attribute name="module" value="true"/>
-			<attribute name="add-exports" value="java.base/java.lang=ALL-UNNAMED:java.desktop/sun.awt=ALL-UNNAMED:java.desktop/sun.java2d=ALL-UNNAMED"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/vedra/Desktop/Java4Java3D/j3dcore.jar"/>
-	<classpathentry kind="lib" path="C:/Users/vedra/Desktop/Java4Java3D/j3dexamples.jar"/>
-	<classpathentry kind="lib" path="C:/Users/vedra/Desktop/Java4Java3D/j3dutils.jar"/>
-	<classpathentry kind="lib" path="C:/Users/vedra/Desktop/Java4Java3D/jogamp-fat.jar"/>
-	<classpathentry kind="lib" path="C:/Users/vedra/Desktop/Java4Java3D/vecmath.jar"/>
+	<classpathentry kind="lib" path="/Users/kellyowenya/Downloads/Jars4Java3DMac/j3dcore.jar"/>
+	<classpathentry kind="lib" path="/Users/kellyowenya/Downloads/Jars4Java3DMac/vecmath.jar"/>
+	<classpathentry kind="lib" path="/Users/kellyowenya/Downloads/Jars4Java3DMac/jogamp-fat.jar"/>
+	<classpathentry kind="lib" path="/Users/kellyowenya/Downloads/Jars4Java3DMac/j3dutils.jar"/>
+	<classpathentry kind="lib" path="/Users/kellyowenya/Downloads/Jars4Java3DMac/j3dexamples.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

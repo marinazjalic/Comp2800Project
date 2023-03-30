@@ -409,7 +409,7 @@ class Rocket extends ProjectObjects {
 	public static Alpha movementAlpha = new Alpha(1, Alpha.INCREASING_ENABLE | Alpha.DECREASING_ENABLE, 0, 0, 0, 2000, 1000, 4000, 2000, 1000);
 	public Rocket() {
 		Transform3D translator = new Transform3D();	
-		translator.setTranslation(new Vector3f(2f, 0.75f, 0f));
+		translator.setTranslation(new Vector3f(2f, 0.43f, 0f));
 		Transform3D scaler = new Transform3D();
 		scaler.setScale(0.3);
 		Transform3D trfm = new Transform3D();
