@@ -4,4 +4,8 @@ Team Members:
 - Cecelia Nydam
 - Kelly Owenya
 - Tyrel Finley
-- Loveleen Singh Chahal
+
+
+
+
+Run Galaxy.java for a single user view, and MultiUserGalaxy.java for a multi-user view.
